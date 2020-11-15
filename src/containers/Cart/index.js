@@ -4,6 +4,8 @@ import Table from "@material-ui/core/Table";
 import TableBody from "@material-ui/core/TableBody";
 import TableCell from "@material-ui/core/TableCell";
 import TableContainer from "@material-ui/core/TableContainer";
+import CircularProgress from '@material-ui/core/CircularProgress';
+import Fade from '@material-ui/core/Fade';
 import TableHead from "@material-ui/core/TableHead";
 import TableRow from "@material-ui/core/TableRow";
 import Paper from "@material-ui/core/Paper";
@@ -36,6 +38,7 @@ export default function SimpleTable() {
   const [special, setSpecial] = useState("");
   const [cartItems, setCartItems] = useState({});
   const [checkDisable, setDisable] = useState(false);
+  const [loader, setLoader] = useState(false);
   let totalPrice = 0;
 
   const setCartItemsInCookies = () => {
@@ -105,7 +108,7 @@ export default function SimpleTable() {
   };
 
   const placeOrder = () => {
-    setDisable(true);
+    setLoader(true);
     console.log("cartItems", items);
     const data = {
       price: totalPrice + (totalPrice * 5) / 100,
@@ -121,6 +124,7 @@ export default function SimpleTable() {
     };
     console.log("data", data);
     api.createOrder(data).then((res) => {
+      setLoader(false)
       console.log("create order resp:", res);
       Swal.fire("Success", "Order placed Successfully", "success").then(() => {
         cookie.set("cart-items", {});
@@ -139,6 +143,16 @@ export default function SimpleTable() {
     <>
       <Navbar active="Order Summary" />
       <div>
+      <Fade
+          in={loader}
+          style={{
+            transitionDelay: loader ? '800ms' : '0ms',
+          }}
+          className={'loader'}
+          unmountOnExit
+        >
+          <CircularProgress />
+        </Fade>
         <TableContainer component={Paper}>
           <Table className={classes.table} aria-label="simple table">
             <TableHead>
@@ -286,6 +300,7 @@ export default function SimpleTable() {
 
     </div> */}
         <div className="order-summary-link">
+        
           <center>
             <Button
               variant="contained"

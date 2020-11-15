@@ -9,6 +9,13 @@
     user-select: none;
 } */
 
+.loader{
+    position: absolute;
+    position: absolute;
+    left: 48rem;
+    top: 26rem;
+}
+
 .image_style{
     border-radius: 20px !important;
 }
