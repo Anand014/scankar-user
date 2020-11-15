@@ -1,0 +1,31 @@
+/* .MuiSvgIcon-root {
+    fill: currentColor;
+    width: 0.7em !important;
+    height: 0.7em !important;
+    display: inline-block;
+    font-size: 1.5rem;
+    transition: fill 200ms cubic-bezier(0.4, 0, 0.2, 1) 0ms;
+    flex-shrink: 0;
+    user-select: none;
+} */
+
+.image_style{
+    border-radius: 20px !important;
+}
+.totalprice_gst{
+    text-align: center;
+    margin-bottom: 1.5em;
+}
+
+.ui.secondary.button{
+    border-radius: 25px !important;
+    background-color: #c5a51f !important;
+    margin-bottom: 3em !important;
+}
+.item_name{
+    text-transform: capitalize;
+    font-weight: bold;
+}
+.ui.basic.buttons{
+    padding: 1em !important;
+}

@@ -1,0 +1,39 @@
+*{
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+.MuiTabScrollButton-root {
+  width: 0px !important;
+  opacity: 0.8;
+  flex-shrink: 0;
+}
+.MuiTab-root {
+  padding: 6px 6px !important;
+}
+.image_style{
+  border-radius: 8px !important;
+  width:200px !important;
+  height: 115px !important;
+}
+
+.remove_padding{
+  padding: 2px !important;
+}
+
+/* 
+.MuiTab-textColorPrimary {
+  color:hsl(39deg 100% 59%) !important;
+}
+
+
+.PrivateTabIndicator-colorPrimary-46 {
+    background-color: hsl(39deg 100% 59%) !important;
+} */
+
+/* .PrivateTabIndicator{
+  background: red !important;
+} */
+.PrivateTabIndicator-colorPrimary-10 {
+  background-color: rgb(197 165 31) !important;
+}

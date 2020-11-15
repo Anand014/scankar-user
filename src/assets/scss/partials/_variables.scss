@@ -1,0 +1,32 @@
+$header-height: 50px;
+$Menu-width: 264px;
+$Menu-collapsed-width: 80px;
+
+$primary-gradient: linear-gradient(-135deg, #1976d2 0%, #BE83F0 100%);
+$secondary-gradient: linear-gradient(-135deg, #FB6C89 0%, #FF9489 100%);
+$disabled-gradient: linear-gradient(-135deg, #d8d8d8 0%, #e8e8e8 100%);
+
+$primary-color: #1976d2;
+$highlighted-color: #5646B3;
+$error-color: #FB6C89;
+$warning-color: #f4c22b;
+$danger-color: #f44236;
+$success-color: #1de9b6;
+$purple-color: #a389d4;
+$info-color: #3ebfea;
+$secondary-color: #CEB8F1;
+$default-color: #2a2a2a;
+$light-color: #4F4F4F;
+$lighter-color: #AEAEAE;
+$lightest-color: #EBEBEB;
+$dark-color: #2a2a2a;
+$inverse-color: $dark-color;
+
+$app-font-family: 'Source Sans Pro', sans-serif;
+$app-secondary-font-family: 'Source Sans Pro', sans-serif;
+$app-font-size: 16px;
+$app-background: #edf1f5;
+$app-font-color: #000;
+$app-heading-color: #111;
+$app-border: #eaeaea;
+$app-transition: all 0.3s ease-in-out;

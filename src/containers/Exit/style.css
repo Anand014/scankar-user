@@ -1,0 +1,16 @@
+.another_button{
+   margin-bottom: 1em !important;
+   border-radius: 20px !important;
+   /* color: rgb(197 165 31) !important; */
+}
+.exit_button{
+    border-radius: 20px !important;
+
+}
+.main_conatainer_wrapper{
+    display: flex;
+    height: 100vh;
+    justify-content: center;
+    align-items: center;
+
+}

@@ -1,0 +1,48 @@
+.MuiAvatar-colorDefault {
+    border-radius: 0px !important;
+    width: 6em !important;
+    height: 3em !important;
+    margin-right: 0.5em !important;
+}
+.MuiBox-root-7 {
+    margin-top: 1em;
+     padding: 0px 0px 0px 0px !important;
+}
+.MuiBox-root-8 {
+    padding: 0px 0px 0px 0px !important;
+
+}
+.addcard_wrapper{
+    position: fixed;
+    right: 1.5em;
+    bottom: 2em ;
+}
+
+
+.item-img{
+    height:56px;
+    width:56px;
+    background-size:cover;
+}
+
+.buttons_style{
+    font-size: 1.2rem !important;
+}
+
+.button_style{
+    font-size: 1.2rem !important;
+
+}
+
+.icon_style{
+    font-size: 1.2rem !important;
+
+}
+.MuiButtonGroup-grouped {
+    min-width: 20px !important;
+    width: 2em !important;
+    padding: 0px !important;
+}
+.MuiBox-root {
+    padding: 0px !important;
+}
