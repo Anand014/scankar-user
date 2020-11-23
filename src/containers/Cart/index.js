@@ -4,8 +4,8 @@ import Table from "@material-ui/core/Table";
 import TableBody from "@material-ui/core/TableBody";
 import TableCell from "@material-ui/core/TableCell";
 import TableContainer from "@material-ui/core/TableContainer";
-import CircularProgress from '@material-ui/core/CircularProgress';
-import Fade from '@material-ui/core/Fade';
+import CircularProgress from "@material-ui/core/CircularProgress";
+import Fade from "@material-ui/core/Fade";
 import TableHead from "@material-ui/core/TableHead";
 import TableRow from "@material-ui/core/TableRow";
 import Paper from "@material-ui/core/Paper";
@@ -88,7 +88,7 @@ export default function SimpleTable() {
         setCartItems(newCartItems);
         return;
       } else {
-        console.log("Else case::",newCartItems[itemId])
+        console.log("Else case::", newCartItems[itemId]);
         delete newCartItems[itemId];
         cookie.set("cart-items", newCartItems);
         setCartItems(newCartItems);
@@ -124,7 +124,7 @@ export default function SimpleTable() {
     };
     console.log("data", data);
     api.createOrder(data).then((res) => {
-      setLoader(false)
+      setLoader(false);
       console.log("create order resp:", res);
       Swal.fire("Success", "Order placed Successfully", "success").then(() => {
         cookie.set("cart-items", {});
@@ -135,7 +135,9 @@ export default function SimpleTable() {
 
   // console.log("THIS IS THE VALUE OF ALL IN CART", allItems);
   const getItemFromAllItems = (id) => {
-    return allItems ? allItems.find(((item) => item._id === id) || {}) : history.goBack();
+    return allItems
+      ? allItems.find(((item) => item._id === id) || {})
+      : history.goBack();
   };
 
   // console.log("This is All items", allItems);
@@ -143,12 +145,12 @@ export default function SimpleTable() {
     <>
       <Navbar active="Order Summary" />
       <div>
-      <Fade
+        <Fade
           in={loader}
           style={{
-            transitionDelay: loader ? '800ms' : '0ms',
+            transitionDelay: loader ? "800ms" : "0ms",
           }}
-          className={'loader'}
+          className={"loader"}
           unmountOnExit
         >
           <CircularProgress />
@@ -168,7 +170,9 @@ export default function SimpleTable() {
             <TableBody>
               {Object.keys(cartItems).length !== 0 &&
                 Object.keys(cartItems).map((id, index) => {
-                  const item = getItemFromAllItems(id) ? getItemFromAllItems(id) : [] ;
+                  const item = getItemFromAllItems(id)
+                    ? getItemFromAllItems(id)
+                    : [];
                   totalPrice += item.price * cartItems[id];
                   return (
                     <TableRow key={id}>
@@ -300,7 +304,6 @@ export default function SimpleTable() {
 
     </div> */}
         <div className="order-summary-link">
-        
           <center>
             <Button
               variant="contained"

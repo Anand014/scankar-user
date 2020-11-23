@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import PropTypes from "prop-types";
 import { makeStyles } from "@material-ui/core/styles";
-import { AppBar, Tabs, Tab, Typography, Box } from "@material-ui/core";
+import { AppBar, Tabs, Tab, Typography, Box, Button } from "@material-ui/core";
 import * as api from "../../api/orderAPI";
 import { useHistory } from "react-router-dom";
 import Navbar from "../Navbar";
@@ -9,6 +9,7 @@ import cookie from "js-cookie";
 import "./style.css";
 
 import Items from "../../components/Items";
+import Axios from "axios";
 function TabPanel(props) {
   const { children, value, index, ...other } = props;
 
@@ -65,6 +66,27 @@ export default function Menu(props) {
   const [data, setData] = useState(null);
 
   useEffect(() => {
+    console.log("window.locaaaaaaaaaaa", window.location.href.split("/"));
+    // const username = cookie.get("username");
+    // const id = req.params.id; //dummyorderid
+    // try {
+    //   Axios.get(`http://localhost:5000/api/v1/ordershare/${id}`)
+    //     .then((res) => {
+    //       if (res.data.lockBy === "null") {
+    //         // remove disabled
+    //         // secartitem via id
+    //       } else {
+    //         // make disable for cart update
+    //         // secartitem via id
+    //       }
+    //     })
+    //     .catch((err) => {
+    //       console.log(err);
+    //     });
+    // } catch (error) {
+    //   console.log(err);
+    // }
+
     const { categories, items, value, data, clicked } = history.location.props
       ? history.location.props
       : {};
@@ -146,9 +168,9 @@ export default function Menu(props) {
 
     newCartItems[itemId] = 1;
     setCartItems(newCartItems);*/
-
+    const username = cookie.get("username");
     const newCartItems = JSON.parse(cookie.get("cart-items"));
-    console.log("Cart items", newCartItems);
+    console.log("Cart items..........................", newCartItems);
     if (newCartItems[itemId]) {
       newCartItems[itemId] = ++newCartItems[itemId];
       cookie.set("cart-items", newCartItems);
@@ -157,6 +179,20 @@ export default function Menu(props) {
     }
     newCartItems[itemId] = 1;
     cookie.set("cart-items", newCartItems);
+    if (window.location.href.split("/").length === 5) {
+      let hotelId = window.location.href.split("/")[4];
+      hotelId = hotelId.replace("take", "");
+      hotelId = hotelId.replace("dinein", "");
+      try {
+        Axios.post("http://localhost:5000/api/v1/ordershare/createDummyOrder", {
+          username: username,
+          foodinfo: newCartItems,
+          HotelId: hotelId,
+        }).then((res) => {
+          window.location.assign(`${window.location.href}/${res.data._id}`);
+        });
+      } catch (error) {}
+    }
     setCartItems(newCartItems);
   };
 
@@ -226,6 +262,9 @@ export default function Menu(props) {
       console.log(err);
     }
   };
+  const handleLockBy = () => {
+    //handle lockby
+  };
   console.log("this is cart items", cartItems);
   return (
     <>
@@ -271,6 +310,13 @@ export default function Menu(props) {
             <Tab label="Item Six" icon={<img alt="ge-title" className="image_style" style={{ width: " 200px" }} src="https://ak.picdn.net/shutterstock/videos/12756518/thumb/9.jpg" />} {...a11yProps(5)} />
             <Tab label="Item Seven" icon={<img alt="ge-title" className="image_style" style={{ width: " 200px" }} src="https://ak.picdn.net/shutterstock/videos/12756518/thumb/9.jpg" />} {...a11yProps(6)} /> */}
             </Tabs>
+            <Button
+              variant="outlined"
+              className="lockby"
+              onClick={handleLockBy}
+            >
+              LockBy
+            </Button>
           </AppBar>
           {categories &&
             categories.map((category, index) => {
