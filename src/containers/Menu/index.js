@@ -1,7 +1,15 @@
 import React, { useState, useEffect } from "react";
 import PropTypes from "prop-types";
 import { makeStyles } from "@material-ui/core/styles";
-import { AppBar, Tabs, Tab, Typography, Box, Grid } from "@material-ui/core";
+import {
+  AppBar,
+  Tabs,
+  Tab,
+  Typography,
+  Box,
+  Grid,
+  Button,
+} from "@material-ui/core";
 import * as api from "../../api/orderAPI";
 import { useHistory } from "react-router-dom";
 import Navbar from "../Navbar";
@@ -11,11 +19,7 @@ import "./style.css";
 
 import Items from "../../components/Items";
 import Axios from "axios";
-<<<<<<< HEAD
-import { Button } from "semantic-ui-react";
-=======
-
->>>>>>> 6fcd694f29bde31377ccfec5bb0947606ca51016
+import { ControlLabel } from "rsuite";
 function TabPanel(props) {
   const { children, value, index, ...other } = props;
 
@@ -70,11 +74,14 @@ export default function Menu(props) {
   const [clickedCat, setclickedCategory] = useState({});
   const [user, setUser] = useState(cookie.get("userId"));
   const [data, setData] = useState(null);
-  const [lockBy, setLockBy] = useState(false);
+  const [lockByToggle, setLockByToggle] = useState(false);
+  const [LockByName, setLockByName] = useState("");
+
+  const username = cookie.get("username");
 
   useEffect(() => {
     console.log("window.location", window.location.href.split("/"));
-    const username = cookie.get("username");
+
     // try {
     //   Axios.get(
     //     `http://localhost:5000/api/v1/ordershare/5fbc27d3b269175710d7f126`
@@ -88,6 +95,23 @@ export default function Menu(props) {
     // } catch (error) {
     //   console.log(error);
     // }
+
+    if (window.location.href.split("/").length === 6) {
+      const id = window.location.href.split("/")[5];
+      try {
+        Axios.get(`http://localhost:5000/api/v1/ordershare/${id}`).then(
+          (res) => {
+            if (username === res.data.data.product.lockBy) {
+              setLockByName(res.data.data.product.lockBy);
+            } else {
+              setLockByToggle(true);
+            }
+          }
+        );
+      } catch (error) {
+        console.log(error);
+      }
+    }
 
     const { categories, items, value, data, clicked } = history.location.props
       ? history.location.props
@@ -109,39 +133,40 @@ export default function Menu(props) {
 
     let temp = [];
 
-    api.getMenu(user).then((res) => {
-      res.data.user.menu.map((res) => {
-        temp.push(res.category);
+    api
+      .getMenu(user)
+      .then((res) => {
+        res.data.user.menu.map((res) => {
+          temp.push(res.category);
+        });
+
+        let tempcategories = temp.filter((v, i, a) => a.indexOf(v) === i);
+
+        const newItems = {};
+        res.data.user.menu.forEach((item, index) => {
+          const { category, ...restData } = item;
+          if (restData.status !== "Available") {
+            return;
+          }
+          if (newItems[category]) {
+            newItems[category].push({ ...restData });
+          } else {
+            newItems[category] = [{ ...restData }];
+          }
+        });
+        // console.log("newItemsF:", categories);
+        setItems(newItems);
+
+        setData(res.data.user.menu);
+        console.log(tempcategories, "tempcategories");
+        setCategories(tempcategories);
+        setCartItemsInCookies();
+      })
+      .catch((err) => {
+        debugger;
+        console.log(err, "err on login");
+        // window.location.assign(window.location.href.replace("/menu","/login"));
       });
-
-      let tempcategories = temp.filter((v, i, a) => a.indexOf(v) === i);
-
-      const newItems = {};
-      res.data.user.menu.forEach((item, index) => {
-        const { category, ...restData } = item;
-        if (restData.status !== "Available") {
-          return;
-        }
-        if (newItems[category]) {
-          newItems[category].push({ ...restData });
-        } else {
-          newItems[category] = [{ ...restData }];
-        }
-      });
-      // console.log("newItemsF:", categories);
-      setItems(newItems);
-      
-      setData(res.data.user.menu);
-      console.log(tempcategories,"tempcategories")
-      setCategories(tempcategories);
-      setCartItemsInCookies();
-
-    }).catch(err=>{
-      debugger
-      console.log(err,"err on login")
-      // window.location.assign(window.location.href.replace("/menu","/login"));
-      
-    });
   }, []);
   const handleChange = (event, newValue) => {
     // const clicked = cookie.get("clicked")
@@ -178,7 +203,6 @@ export default function Menu(props) {
 
     newCartItems[itemId] = 1;
     setCartItems(newCartItems);*/
-    const username = cookie.get("username");
     const newCartItems = JSON.parse(cookie.get("cart-items"));
     console.log("Cart items..121111", newCartItems);
 
@@ -273,7 +297,21 @@ export default function Menu(props) {
     }
   };
   const handleLockBy = () => {
-    //we make null value or
+    if (window.location.href.split("/").length === 6) {
+      const name = "null";
+      const id = window.location.href.split("/")[5];
+      if (username === LockByName) {
+        try {
+          Axios.put(`http://localhost:5000/api/v1/ordershare/${id}`, {
+            lockBy: name,
+          }).then((res) => {
+            console.log(res);
+          });
+        } catch (error) {
+          console.log(error);
+        }
+      }
+    }
   };
   console.log("this is cart items", cartItems);
   return (
@@ -326,7 +364,7 @@ export default function Menu(props) {
               justify="center"
               alignItems="flex-end"
             >
-              <Button onClick={handleLockBy} disabled={lockBy}>
+              <Button onClick={handleLockBy} disabled={lockByToggle}>
                 LockBy
               </Button>
             </Grid>
@@ -335,22 +373,47 @@ export default function Menu(props) {
             categories.map((category, index) => {
               // console.log("clicked", clickedCat)
               return (
-                <TabPanel value={value} index={index} key={index}>
-                  {items[category] && (
-                    <Items
-                      className="remove_padding"
-                      style={{ padding: "5px" }}
-                      value={value}
-                      items={items[category]}
-                      allItems={items}
-                      cartItems={cartItems}
-                      handleAddCartItem={handleAddCartItem}
-                      handleRemoveCartItem={handleRemoveCartItem}
-                      handleDiscardCartItem={handleDiscardCartItem}
-                      data={data}
-                    />
+                <div>
+                  {lockByToggle ? (
+                    <div style={{ pointerEvents: "none", opacity: "0.7" }}>
+                      <TabPanel value={value} index={index} key={index}>
+                        {items[category] && (
+                          <Items
+                            className="remove_padding"
+                            style={{ padding: "5px" }}
+                            value={value}
+                            items={items[category]}
+                            allItems={items}
+                            cartItems={cartItems}
+                            handleAddCartItem={handleAddCartItem}
+                            handleRemoveCartItem={handleRemoveCartItem}
+                            handleDiscardCartItem={handleDiscardCartItem}
+                            data={data}
+                          />
+                        )}
+                      </TabPanel>
+                    </div>
+                  ) : (
+                    <div>
+                      <TabPanel value={value} index={index} key={index}>
+                        {items[category] && (
+                          <Items
+                            className="remove_padding"
+                            style={{ padding: "5px" }}
+                            value={value}
+                            items={items[category]}
+                            allItems={items}
+                            cartItems={cartItems}
+                            handleAddCartItem={handleAddCartItem}
+                            handleRemoveCartItem={handleRemoveCartItem}
+                            handleDiscardCartItem={handleDiscardCartItem}
+                            data={data}
+                          />
+                        )}
+                      </TabPanel>
+                    </div>
                   )}
-                </TabPanel>
+                </div>
               );
             })}
           {/* <TabPanel value={value} index={1}>

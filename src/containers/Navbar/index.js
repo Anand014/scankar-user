@@ -12,9 +12,9 @@ import {
   IconButton,
   // Drawer,
   SwipeableDrawer,
+  Button,
 } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
-import { Button } from "semantic-ui-react";
 // import Container from '@material-ui/core/Container';
 import KeyboardArrowUpIcon from "@material-ui/icons/KeyboardArrowUp";
 import MenuIcon from "@material-ui/icons/Menu";
@@ -128,7 +128,7 @@ const Navbar = (props) => {
       showConfirmButton: false,
       timer: 1500,
     });
-    window.location.assign(window.location.href.replace("/menu","/login"));
+    window.location.assign(window.location.href.replace("/menu", "/login"));
   };
   const routeHandle = () => {
     let idd = window.location.href.split("/")[4];
@@ -152,8 +152,12 @@ const Navbar = (props) => {
             {/* </Link> */}
             {props.active}
           </Typography>
-          <Button style={{ marginLeft: "2rem" }} onClick={routeHandle}>
-            Go Back
+          <Button
+            style={{ marginLeft: "2rem", fontSize: "1rem" }}
+            onClick={routeHandle}
+            color="inherit"
+          >
+            create new order
           </Button>
 
           <IconButton
