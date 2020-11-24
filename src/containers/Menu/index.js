@@ -98,18 +98,13 @@ export default function Menu(props) {
     // }
 
     const id = window.location.href.split("/")[5];
-    try {
-      Axios.get(`http://localhost:5000/api/v1/ordershare/${id}`).then((res) => {
-        if (username === res.data.data.product.lockBy) {
-          setLockByName(res.data.data.product.lockBy);
-        } else {
-          setLockByToggle(true);
-        }
-      });
-    } catch (error) {
-      console.log(error);
-    }
-
+    api.getDummyOrder(id).then((res) => {
+      if (username === res.data.product.lockBy) {
+        setLockByName(res.data.product.lockBy);
+      } else {
+        setLockByToggle(true);
+      }
+    });
     const { categories, items, value, data, clicked } = history.location.props
       ? history.location.props
       : {};
@@ -215,17 +210,16 @@ export default function Menu(props) {
       let hotelId = window.location.href.split("/")[4];
       hotelId = hotelId.replace("take", "");
       hotelId = hotelId.replace("dinein", "");
-      try {
-        Axios.post("http://localhost:5000/api/v1/ordershare/createDummyOrder", {
+
+      api
+        .createDummyOrder({
           username: username,
           foodinfo: cartItems,
           HotelId: hotelId,
-        }).then((res) => {
-          window.location.assign(`${window.location.href}/${res.data._id}`);
+        })
+        .then((res) => {
+          window.location.assign(`${window.location.href}/${res._id}`);
         });
-      } catch (error) {
-        console.log(error);
-      }
     }
     setCartItems(newCartItems);
   };
@@ -298,15 +292,9 @@ export default function Menu(props) {
       const name = "null";
       const id = window.location.href.split("/")[5];
       if (username === LockByName) {
-        try {
-          Axios.put(`http://localhost:5000/api/v1/ordershare/${id}`, {
-            lockBy: name,
-          }).then((res) => {
-            console.log(res);
-          });
-        } catch (error) {
-          console.log(error);
-        }
+        api.changeLockByName(id, { lockBy: name }).then((res) => {
+          console.log(res);
+        });
       }
     }
   };
