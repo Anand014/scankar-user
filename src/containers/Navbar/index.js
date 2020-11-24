@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect } from "react";
 import PropTypes from "prop-types";
 import {
   AppBar,
@@ -14,16 +14,17 @@ import {
   SwipeableDrawer,
 } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
+import { Button } from "semantic-ui-react";
 // import Container from '@material-ui/core/Container';
 import KeyboardArrowUpIcon from "@material-ui/icons/KeyboardArrowUp";
 import MenuIcon from "@material-ui/icons/Menu";
 import ArrowBackIcon from "@material-ui/icons/ArrowBack";
 import Overview from "../Overview";
-import {useHistory, Link} from "react-router-dom";
-import * as api from '../../api/orderAPI';
+import { useHistory, Link } from "react-router-dom";
+import * as api from "../../api/orderAPI";
 import cookie from "js-cookie";
 import Swal from "sweetalert2";
-import {useParams} from "react-router-dom";
+import { useParams } from "react-router-dom";
 const useStyles = makeStyles((theme) => ({
   root: {
     position: "fixed",
@@ -52,9 +53,9 @@ const cusomeStyle = {
     lineHeight: "2.5",
     color: "rgb(197 165 31)",
   },
-  appbar:{
-    background: "#c5a51f"
-  }
+  appbar: {
+    background: "#c5a51f",
+  },
 };
 
 function ScrollTop(props) {
@@ -104,32 +105,41 @@ const Navbar = (props) => {
     setOpen(true);
   };
 
-  
   const handleSignOut = async () => {
     setOpen(false);
-    const {isConfirmed} = await Swal.fire({
-      title: '<strong>Do you want to sign off?</strong>',
-      icon: 'info',
+    const { isConfirmed } = await Swal.fire({
+      title: "<strong>Do you want to sign off?</strong>",
+      icon: "info",
       showCloseButton: true,
       showCancelButton: true,
       focusConfirm: false,
-      confirmButtonText:'Yes',
-      cancelButtonText:'No'
-    })
-   if(!isConfirmed)
-    {
+      confirmButtonText: "Yes",
+      cancelButtonText: "No",
+    });
+    if (!isConfirmed) {
       return;
     }
     cookie.remove("userId");
+    cookie.remove("cart-items");
     Swal.fire({
-      position: 'center',
-      icon: 'success',
-      title: 'Your have been signed off',
+      position: "center",
+      icon: "success",
+      title: "Your have been signed off",
       showConfirmButton: false,
-      timer: 1500
-    })
-   window.location.assign(window.location.href.replace("/menu","/login"));
-  }
+      timer: 1500,
+    });
+    window.location.assign(window.location.href.replace("/menu","/login"));
+  };
+  const routeHandle = () => {
+    if (window.location.href.split("/").length === 5) {
+      let orderRoute = window.location.href.split("/");
+      orderRoute.pop();
+      orderRoute = orderRoute.join("/");
+      window.location.assign(`${orderRoute}`);
+    } else {
+      history.goBack();
+    }
+  };
 
   return (
     <React.Fragment>
@@ -139,21 +149,25 @@ const Navbar = (props) => {
         <Toolbar id="back-to-top-anchor">
           <Typography variant="h6">
             {/* <Link to="/"> */}
-            <IconButton style={{color: "#ffffff"}}>
-              <ArrowBackIcon onClick={e => history.goBack()} />
+            <IconButton style={{ color: "#ffffff" }}>
+              <ArrowBackIcon onClick={(e) => history.goBack()} />
             </IconButton>
             {/* </Link> */}
             {props.active}
           </Typography>
+          <Button style={{ marginLeft: "2rem" }} onClick={routeHandle}>
+            Go Back
+          </Button>
+
           <IconButton
             style={{ marginLeft: "auto" }}
             color="inherit"
             aria-label="open drawer"
             edge="end"
-           // onClick={handleDrawer}
+            // onClick={handleDrawer}
             // className={clsx(open && classes.hide)}
           >
-            <MenuIcon onClick={handleDrawer}/>
+            <MenuIcon onClick={handleDrawer} />
           </IconButton>
         </Toolbar>
       </AppBar>
@@ -168,7 +182,9 @@ const Navbar = (props) => {
           <h6 style={cusomeStyle.drawerMenuName}>Home</h6>
           <h6 style={cusomeStyle.drawerMenuName}>Menu</h6>
           <h6 style={cusomeStyle.drawerMenuName}>Dashboard</h6>
-          <h6 style={cusomeStyle.drawerMenuName} onClick={handleSignOut}>SignOut</h6>
+          <h6 style={cusomeStyle.drawerMenuName} onClick={handleSignOut}>
+            SignOut
+          </h6>
         </div>
       </SwipeableDrawer>
 

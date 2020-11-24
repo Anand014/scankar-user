@@ -66,27 +66,23 @@ export default function Menu(props) {
   const [clickedCat, setclickedCategory] = useState({});
   const [user, setUser] = useState(cookie.get("userId"));
   const [data, setData] = useState(null);
+  const [lockBy, setLockBy] = useState(false);
 
   useEffect(() => {
-    console.log("window.locaaaaaaaaaaa", window.location.href.split("/"));
-    // const username = cookie.get("username");
-    // const id = req.params.id; //dummyorderid
+    console.log("window.location", window.location.href.split("/"));
+    const username = cookie.get("username");
     // try {
-    //   Axios.get(`http://localhost:5000/api/v1/ordershare/${id}`)
+    //   Axios.get(
+    //     `http://localhost:5000/api/v1/ordershare/5fbc27d3b269175710d7f126`
+    //   )
     //     .then((res) => {
-    //       if (res.data.lockBy === "null") {
-    //         // remove disabled
-    //         // secartitem via id
-    //       } else {
-    //         // make disable for cart update
-    //         // secartitem via id
-    //       }
+    //       console.log(res.data.data.product.foodinfo, "this is dummyfoodinfo");
     //     })
     //     .catch((err) => {
     //       console.log(err);
     //     });
     // } catch (error) {
-    //   console.log(err);
+    //   console.log(error);
     // }
 
     const { categories, items, value, data, clicked } = history.location.props
@@ -98,7 +94,7 @@ export default function Menu(props) {
     console.log("data", data);
     console.log("clicked", clicked);
 
-    if (items && categories) {
+    if (items) {
       setCategories(categories);
       setItems(items);
       setValue(value);
@@ -128,7 +124,7 @@ export default function Menu(props) {
           newItems[category] = [{ ...restData }];
         }
       });
-      console.log("newItemsF:", categories);
+      // console.log("newItemsF:", categories);
       setItems(newItems);
       
       setData(res.data.user.menu);
@@ -137,9 +133,9 @@ export default function Menu(props) {
       setCartItemsInCookies();
 
     }).catch(err=>{
-      // debugger
+      debugger
       console.log(err,"err on login")
-      window.location.assign(window.location.href.replace("/menu","/login"));
+      // window.location.assign(window.location.href.replace("/menu","/login"));
       
     });
   }, []);
@@ -180,7 +176,8 @@ export default function Menu(props) {
     setCartItems(newCartItems);*/
     const username = cookie.get("username");
     const newCartItems = JSON.parse(cookie.get("cart-items"));
-    console.log("Cart items..........................", newCartItems);
+    console.log("Cart items..121111", newCartItems);
+
     if (newCartItems[itemId]) {
       newCartItems[itemId] = ++newCartItems[itemId];
       cookie.set("cart-items", newCartItems);
@@ -196,12 +193,14 @@ export default function Menu(props) {
       try {
         Axios.post("http://localhost:5000/api/v1/ordershare/createDummyOrder", {
           username: username,
-          foodinfo: newCartItems,
+          foodinfo: cartItems,
           HotelId: hotelId,
         }).then((res) => {
           window.location.assign(`${window.location.href}/${res.data._id}`);
         });
-      } catch (error) {}
+      } catch (error) {
+        console.log(error);
+      }
     }
     setCartItems(newCartItems);
   };
@@ -218,7 +217,6 @@ export default function Menu(props) {
       delete --newCartItems[itemId];
       setCartItems(newCartItems);
     }*/
-
     const newCartItems = JSON.parse(cookie.get("cart-items"));
     if (newCartItems[itemId]) {
       if (newCartItems[itemId] > 1) {
@@ -270,7 +268,15 @@ export default function Menu(props) {
       console.log(err);
     }
   };
-  const handleLockBy = () => {
+  const handleLockBy = (e) => {
+    e.preventDefault();
+    const username = cookie.get("username");
+    const id = window.location.href.split("/")[5];
+    try {
+      Axios.get(`http://localhost:5000/api/v1/ordershare/${id}`).then((res) => {
+        console.log(res.data.data.lockBy);
+      });
+    } catch (error) {}
     //handle lockby
   };
   console.log("this is cart items", cartItems);
