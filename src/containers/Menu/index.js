@@ -364,7 +364,11 @@ export default function Menu(props) {
               justify="center"
               alignItems="flex-end"
             >
-              <Button onClick={handleLockBy} disabled={lockByToggle}>
+              <Button
+                onClick={handleLockBy}
+                disabled={lockByToggle}
+                style={{ fontSize: "1rem", marginRight: "1.5rem" }}
+              >
                 LockBy
               </Button>
             </Grid>
