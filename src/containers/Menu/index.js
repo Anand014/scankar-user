@@ -10,6 +10,7 @@ import {
   Grid,
   Button,
 } from "@material-ui/core";
+import RefreshIcon from "@material-ui/icons/Refresh";
 import * as api from "../../api/orderAPI";
 import { useHistory } from "react-router-dom";
 import Navbar from "../Navbar";
@@ -96,21 +97,17 @@ export default function Menu(props) {
     //   console.log(error);
     // }
 
-    if (window.location.href.split("/").length === 6) {
-      const id = window.location.href.split("/")[5];
-      try {
-        Axios.get(`http://localhost:5000/api/v1/ordershare/${id}`).then(
-          (res) => {
-            if (username === res.data.data.product.lockBy) {
-              setLockByName(res.data.data.product.lockBy);
-            } else {
-              setLockByToggle(true);
-            }
-          }
-        );
-      } catch (error) {
-        console.log(error);
-      }
+    const id = window.location.href.split("/")[5];
+    try {
+      Axios.get(`http://localhost:5000/api/v1/ordershare/${id}`).then((res) => {
+        if (username === res.data.data.product.lockBy) {
+          setLockByName(res.data.data.product.lockBy);
+        } else {
+          setLockByToggle(true);
+        }
+      });
+    } catch (error) {
+      console.log(error);
     }
 
     const { categories, items, value, data, clicked } = history.location.props
@@ -165,7 +162,7 @@ export default function Menu(props) {
       .catch((err) => {
         debugger;
         console.log(err, "err on login");
-        // window.location.assign(window.location.href.replace("/menu","/login"));
+        window.location.assign(window.location.href.replace("/menu", "/login"));
       });
   }, []);
   const handleChange = (event, newValue) => {
@@ -313,6 +310,10 @@ export default function Menu(props) {
       }
     }
   };
+  const refreshHandle = () => {
+    // Check the lockby name is null or not.
+    console.log("run");
+  };
   console.log("this is cart items", cartItems);
   return (
     <>
@@ -360,10 +361,15 @@ export default function Menu(props) {
             </Tabs>
             <Grid
               container
-              direction="column"
-              justify="center"
-              alignItems="flex-end"
+              direction="row"
+              justify="flex-end"
+              alignItems="center"
             >
+              <RefreshIcon
+                fontSize="large"
+                style={{ marginRight: "1rem" }}
+                onClick={refreshHandle}
+              />
               <Button
                 onClick={handleLockBy}
                 disabled={lockByToggle}
