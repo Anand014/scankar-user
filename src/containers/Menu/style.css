@@ -1,4 +1,4 @@
-*{
+* {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
@@ -11,13 +11,13 @@
 .MuiTab-root {
   padding: 6px 6px !important;
 }
-.image_style{
+.image_style {
   border-radius: 8px !important;
-  width:200px !important;
+  width: 200px !important;
   height: 115px !important;
 }
 
-.remove_padding{
+.remove_padding {
   padding: 2px !important;
 }
 

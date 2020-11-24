@@ -130,14 +130,11 @@ const Navbar = (props) => {
     history.push(`/${params.id}`);
   };
   const routeHandle = () => {
-    if (window.location.href.split("/").length === 5) {
-      let orderRoute = window.location.href.split("/");
-      orderRoute.pop();
-      orderRoute = orderRoute.join("/");
-      window.location.assign(`${orderRoute}`);
-    } else {
-      history.goBack();
-    }
+    let idd = window.location.href.split("/")[4];
+    let orderRoute = window.location.href.split("/")[3];
+    orderRoute = orderRoute.replace("menu", "overview");
+    console.log(orderRoute);
+    window.location.assign(`http://localhost:3000/${orderRoute}/${idd}`);
   };
 
   return (

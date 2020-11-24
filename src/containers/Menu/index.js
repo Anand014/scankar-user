@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import PropTypes from "prop-types";
 import { makeStyles } from "@material-ui/core/styles";
-import { AppBar, Tabs, Tab, Typography, Box, Button } from "@material-ui/core";
+import { AppBar, Tabs, Tab, Typography, Box, Grid } from "@material-ui/core";
 import * as api from "../../api/orderAPI";
 import { useHistory } from "react-router-dom";
 import Navbar from "../Navbar";
@@ -10,6 +10,7 @@ import "./style.css";
 
 import Items from "../../components/Items";
 import Axios from "axios";
+import { Button } from "semantic-ui-react";
 function TabPanel(props) {
   const { children, value, index, ...other } = props;
 
@@ -260,16 +261,8 @@ export default function Menu(props) {
       console.log(err);
     }
   };
-  const handleLockBy = (e) => {
-    e.preventDefault();
-    const username = cookie.get("username");
-    const id = window.location.href.split("/")[5];
-    try {
-      Axios.get(`http://localhost:5000/api/v1/ordershare/${id}`).then((res) => {
-        console.log(res.data.data.lockBy);
-      });
-    } catch (error) {}
-    //handle lockby
+  const handleLockBy = () => {
+    //we make null value or
   };
   console.log("this is cart items", cartItems);
   return (
@@ -316,13 +309,16 @@ export default function Menu(props) {
             <Tab label="Item Six" icon={<img alt="ge-title" className="image_style" style={{ width: " 200px" }} src="https://ak.picdn.net/shutterstock/videos/12756518/thumb/9.jpg" />} {...a11yProps(5)} />
             <Tab label="Item Seven" icon={<img alt="ge-title" className="image_style" style={{ width: " 200px" }} src="https://ak.picdn.net/shutterstock/videos/12756518/thumb/9.jpg" />} {...a11yProps(6)} /> */}
             </Tabs>
-            <Button
-              variant="outlined"
-              className="lockby"
-              onClick={handleLockBy}
+            <Grid
+              container
+              direction="column"
+              justify="center"
+              alignItems="flex-end"
             >
-              LockBy
-            </Button>
+              <Button onClick={handleLockBy} disabled={lockBy}>
+                LockBy
+              </Button>
+            </Grid>
           </AppBar>
           {categories &&
             categories.map((category, index) => {
