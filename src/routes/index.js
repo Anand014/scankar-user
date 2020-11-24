@@ -8,8 +8,7 @@ const Exit = React.lazy(() => import("../containers/Exit"));
 
 const routes = [
   {
-    path: "/:id",
-    exact: true,
+    path: "/login/:id",
     name: "Home",
     component: Home,
   },
@@ -20,7 +19,6 @@ const routes = [
   },
   {
     path: "/overview/:id",
-    exact: true,
     name: "Overview",
     component: Overview,
   },

@@ -120,6 +120,7 @@ const Navbar = (props) => {
       return;
     }
     cookie.remove("userId");
+    cookie.remove("cart-items");
     Swal.fire({
       position: "center",
       icon: "success",
@@ -127,7 +128,7 @@ const Navbar = (props) => {
       showConfirmButton: false,
       timer: 1500,
     });
-    history.push(`/${params.id}`);
+    window.location.assign(window.location.href.replace("/menu","/login"));
   };
   const routeHandle = () => {
     let idd = window.location.href.split("/")[4];

@@ -6,11 +6,16 @@ import * as api from "../../api/orderAPI";
 import { useHistory } from "react-router-dom";
 import Navbar from "../Navbar";
 import cookie from "js-cookie";
+import _ from "lodash";
 import "./style.css";
 
 import Items from "../../components/Items";
 import Axios from "axios";
+<<<<<<< HEAD
 import { Button } from "semantic-ui-react";
+=======
+
+>>>>>>> 6fcd694f29bde31377ccfec5bb0947606ca51016
 function TabPanel(props) {
   const { children, value, index, ...other } = props;
 
@@ -57,7 +62,7 @@ function a11yProps(index) {
 export default function Menu(props) {
   // const classes = useStyles();
   const [value, setValue] = useState(0);
-  const [categories, setCategories] = useState(0);
+  const [categories, setCategories] = useState([]);
   const [items, setItems] = useState({});
   const [cartItems, setCartItems] = useState({});
   const history = useHistory();
@@ -70,19 +75,19 @@ export default function Menu(props) {
   useEffect(() => {
     console.log("window.location", window.location.href.split("/"));
     const username = cookie.get("username");
-    try {
-      Axios.get(
-        `http://localhost:5000/api/v1/ordershare/5fbc27d3b269175710d7f126`
-      )
-        .then((res) => {
-          console.log(res.data.data.product.foodinfo, "this is dummyfoodinfo");
-        })
-        .catch((err) => {
-          console.log(err);
-        });
-    } catch (error) {
-      console.log(error);
-    }
+    // try {
+    //   Axios.get(
+    //     `http://localhost:5000/api/v1/ordershare/5fbc27d3b269175710d7f126`
+    //   )
+    //     .then((res) => {
+    //       console.log(res.data.data.product.foodinfo, "this is dummyfoodinfo");
+    //     })
+    //     .catch((err) => {
+    //       console.log(err);
+    //     });
+    // } catch (error) {
+    //   console.log(error);
+    // }
 
     const { categories, items, value, data, clicked } = history.location.props
       ? history.location.props
@@ -93,7 +98,7 @@ export default function Menu(props) {
     console.log("data", data);
     console.log("clicked", clicked);
 
-    if (items && categories) {
+    if (items) {
       setCategories(categories);
       setItems(items);
       setValue(value);
@@ -109,7 +114,7 @@ export default function Menu(props) {
         temp.push(res.category);
       });
 
-      let categories = temp.filter((v, i, a) => a.indexOf(v) === i);
+      let tempcategories = temp.filter((v, i, a) => a.indexOf(v) === i);
 
       const newItems = {};
       res.data.user.menu.forEach((item, index) => {
@@ -123,11 +128,19 @@ export default function Menu(props) {
           newItems[category] = [{ ...restData }];
         }
       });
-      console.log("newItemsF:", newItems);
+      // console.log("newItemsF:", categories);
       setItems(newItems);
-      setCategories(categories);
+      
       setData(res.data.user.menu);
+      console.log(tempcategories,"tempcategories")
+      setCategories(tempcategories);
       setCartItemsInCookies();
+
+    }).catch(err=>{
+      debugger
+      console.log(err,"err on login")
+      // window.location.assign(window.location.href.replace("/menu","/login"));
+      
     });
   }, []);
   const handleChange = (event, newValue) => {
@@ -209,8 +222,6 @@ export default function Menu(props) {
       setCartItems(newCartItems);
     }*/
     const newCartItems = JSON.parse(cookie.get("cart-items"));
-    console.log("this is item id", itemId);
-    console.log("Cart items", newCartItems);
     if (newCartItems[itemId]) {
       if (newCartItems[itemId] > 1) {
         newCartItems[itemId] = --newCartItems[itemId];
@@ -332,7 +343,7 @@ export default function Menu(props) {
                       value={value}
                       items={items[category]}
                       allItems={items}
-                      cartItems={JSON.parse(cookie.get("cart-items"))}
+                      cartItems={cartItems}
                       handleAddCartItem={handleAddCartItem}
                       handleRemoveCartItem={handleRemoveCartItem}
                       handleDiscardCartItem={handleDiscardCartItem}
