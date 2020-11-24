@@ -9,6 +9,7 @@ import {
   Box,
   Grid,
   Button,
+  Input,
 } from "@material-ui/core";
 import RefreshIcon from "@material-ui/icons/Refresh";
 import * as api from "../../api/orderAPI";
@@ -19,8 +20,8 @@ import _ from "lodash";
 import "./style.css";
 
 import Items from "../../components/Items";
-import Axios from "axios";
 import { ControlLabel } from "rsuite";
+import { Form } from "semantic-ui-react";
 function TabPanel(props) {
   const { children, value, index, ...other } = props;
 
@@ -82,7 +83,7 @@ export default function Menu(props) {
 
   useEffect(() => {
     console.log("window.location", window.location.href.split("/"));
-
+    console.log(LockByName);
     // try {
     //   Axios.get(
     //     `http://localhost:5000/api/v1/ordershare/5fbc27d3b269175710d7f126`
@@ -96,15 +97,17 @@ export default function Menu(props) {
     // } catch (error) {
     //   console.log(error);
     // }
+    if (window.location.href.split("/").length === 6) {
+      const id = window.location.href.split("/")[5];
+      api.getDummyOrder(id).then((res) => {
+        if (username === res.data.product.lockBy) {
+          setLockByName(res.data.product.lockBy);
+        } else {
+          setLockByToggle(true);
+        }
+      });
+    }
 
-    const id = window.location.href.split("/")[5];
-    api.getDummyOrder(id).then((res) => {
-      if (username === res.data.product.lockBy) {
-        setLockByName(res.data.product.lockBy);
-      } else {
-        setLockByToggle(true);
-      }
-    });
     const { categories, items, value, data, clicked } = history.location.props
       ? history.location.props
       : {};
@@ -289,13 +292,13 @@ export default function Menu(props) {
   };
   const handleLockBy = () => {
     if (window.location.href.split("/").length === 6) {
-      const name = "null";
       const id = window.location.href.split("/")[5];
-      if (username === LockByName) {
-        api.changeLockByName(id, { lockBy: name }).then((res) => {
-          console.log(res);
-        });
-      }
+      let hotelId = window.location.href.split("/")[4];
+      hotelId = hotelId.replace("take", "");
+      hotelId = hotelId.replace("dinein", "");
+      api.changeLockByName(id, LockByName, hotelId).then((res) => {
+        console.log(res.status);
+      });
     }
   };
   const refreshHandle = () => {
@@ -358,13 +361,22 @@ export default function Menu(props) {
                 style={{ marginRight: "1rem" }}
                 onClick={refreshHandle}
               />
-              <Button
-                onClick={handleLockBy}
-                disabled={lockByToggle}
-                style={{ fontSize: "1rem", marginRight: "1.5rem" }}
-              >
-                LockBy
-              </Button>
+              <Form onSubmit={handleLockBy}>
+                <Input
+                  disabled={lockByToggle}
+                  type="text"
+                  placeholder="Enter name"
+                  value={LockByName}
+                  onChange={(e) => setLockByName(e.target.value)}
+                />
+                <Button
+                  type="submit"
+                  disabled={lockByToggle}
+                  style={{ fontSize: "1rem", marginRight: "1.5rem" }}
+                >
+                  LockBy
+                </Button>
+              </Form>
             </Grid>
           </AppBar>
           {categories &&

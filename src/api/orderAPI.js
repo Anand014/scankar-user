@@ -37,11 +37,9 @@ export const getDummyOrder = (id) => {
   return GetRequest(url);
 };
 
-export const changeLockByName = (id, { lockBy }) => {
-  const url = server + `/ordershare/${id}`;
-  return PostRequest(url, {
-    lockBy,
-  });
+export const changeLockByName = (id, LockByName, hotelId) => {
+  const url = server + "/ordershare/updatelockby";
+  return PutRequest(url, { id: id, username: LockByName, HotelId: hotelId });
 };
 
 const GetRequest = (url) => {
