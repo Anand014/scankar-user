@@ -46,7 +46,7 @@ const Home = (props) => {
   }
 
     useEffect(() => {
-      getShopDetails(dummyShopData)
+      
         setTimeout(() => {
             setIsLoading(false);
           }, 1000);
@@ -59,7 +59,8 @@ const Home = (props) => {
 
     const handleUsernameSubmit = (event) => {
         event.preventDefault();
-        history.push({pathname:`/overview/${props.match.params.id}`, props:{}});
+        getShopDetails(dummyShopData);
+        history.push({pathname:`/menu/${window.location.href.split("/")[4]}/${window.location.href.split("/")[5]}`, props:{}});
       };
 
     return (
