@@ -344,7 +344,7 @@ export default function Menu(props) {
                       value={value}
                       items={items[category]}
                       allItems={items}
-                      cartItems={JSON.parse(cookie.get("cart-items"))}
+                      cartItems={cartItems}
                       handleAddCartItem={handleAddCartItem}
                       handleRemoveCartItem={handleRemoveCartItem}
                       handleDiscardCartItem={handleDiscardCartItem}
