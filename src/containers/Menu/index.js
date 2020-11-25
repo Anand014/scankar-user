@@ -102,7 +102,11 @@ export default function Menu(props) {
       const id = window.location.href.split("/")[5];
       api.getDummyOrder(id).then((res) => {
         setDummyOrder(res.data.product)
-        setCartItems(res.data.product.foodinfo[0])
+        setCartItems({...res.data.product.foodinfo[0]})
+        
+          setCartItemsInCookies({...res.data.product.foodinfo[0]});
+       
+        
         if (username === res.data.product.lockBy) {
           setLockByName(res.data.product.lockBy);
         } else {
@@ -153,7 +157,6 @@ export default function Menu(props) {
         setItems(newItems);
 
         setData(res.data.user.menu);
-        console.log(tempcategories, "tempcategories");
         setCategories(tempcategories);
         // setCartItemsInCookies();
       })
@@ -276,14 +279,18 @@ export default function Menu(props) {
     }
   };
 
-  const setCartItemsInCookies = () => {
-    const existingCartItems = cookie.get("cart-items");
-    if (existingCartItems) {
-      setCartItems(JSON.parse(existingCartItems));
+  const setCartItemsInCookies = (data) => {
+    if(Object.keys(data).length>0){
+      cookie.set("cart-items",JSON.stringify({...data}));
       return;
     }
-    cookie.set("cart-items", {});
-    setCartItems(JSON.parse(cookie.get("cart-items")));
+    // const existingCartItems = cookie.get("cart-items");
+    // if (existingCartItems) {
+    //   setCartItems(JSON.parse(existingCartItems));
+    //   return;
+    // }
+    // cookie.set("cart-items", {});
+    // setCartItems(JSON.parse(cookie.get("cart-items")));
   };
 
   const handleGetItems = async (category, index) => {
