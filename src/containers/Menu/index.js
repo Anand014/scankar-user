@@ -78,6 +78,7 @@ export default function Menu(props) {
   const [data, setData] = useState(null);
   const [lockByToggle, setLockByToggle] = useState(false);
   const [LockByName, setLockByName] = useState("");
+  const [dummyOrder,setDummyOrder]=useState({});
 
   const username = cookie.get("username");
 
@@ -100,9 +101,12 @@ export default function Menu(props) {
     if (window.location.href.split("/").length === 6) {
       const id = window.location.href.split("/")[5];
       api.getDummyOrder(id).then((res) => {
+        setDummyOrder(res.data.product)
+        setCartItems(res.data.product.foodinfo[0])
         if (username === res.data.product.lockBy) {
           setLockByName(res.data.product.lockBy);
         } else {
+          setLockByName(res.data.product.lockBy);
           setLockByToggle(true);
         }
       });
@@ -111,18 +115,14 @@ export default function Menu(props) {
     const { categories, items, value, data, clicked } = history.location.props
       ? history.location.props
       : {};
-    console.log("value:", value);
-    console.log("categories", categories);
-    console.log("items", items);
-    console.log("data", data);
-    console.log("clicked", clicked);
+   
 
     if (items) {
       setCategories(categories);
       setItems(items);
       setValue(value);
       setData(data);
-      setCartItemsInCookies();
+      // setCartItemsInCookies();
       return;
     }
 
@@ -155,7 +155,7 @@ export default function Menu(props) {
         setData(res.data.user.menu);
         console.log(tempcategories, "tempcategories");
         setCategories(tempcategories);
-        setCartItemsInCookies();
+        // setCartItemsInCookies();
       })
       .catch((err) => {
         debugger;
@@ -198,18 +198,23 @@ export default function Menu(props) {
 
     newCartItems[itemId] = 1;
     setCartItems(newCartItems);*/
-    const newCartItems = JSON.parse(cookie.get("cart-items"));
-    console.log("Cart items..121111", newCartItems);
+    const newCartItems = cartItems;
+    
 
     if (newCartItems[itemId]) {
       newCartItems[itemId] = ++newCartItems[itemId];
       cookie.set("cart-items", newCartItems);
-      setCartItems(newCartItems);
-      return;
+      console.log(newCartItems,"newcartItems")
+      setCartItems({...newCartItems});
+      
     }
+    else{
+
+    
     newCartItems[itemId] = 1;
     cookie.set("cart-items", newCartItems);
-    if (window.location.href.split("/").length === 5) {
+    console.log(newCartItems,"newcartItems outside")
+    if (window.location.href.split("/").length === 5 ) {
       let hotelId = window.location.href.split("/")[4];
       hotelId = hotelId.replace("take", "");
       hotelId = hotelId.replace("dinein", "");
@@ -217,14 +222,14 @@ export default function Menu(props) {
       api
         .createDummyOrder({
           username: username,
-          foodinfo: cartItems,
+          foodinfo: newCartItems,
           HotelId: hotelId,
         })
         .then((res) => {
           window.location.assign(`${window.location.href}/${res._id}`);
         });
     }
-    setCartItems(newCartItems);
+    setCartItems({...newCartItems});}
   };
 
   const handleRemoveCartItem = (itemId) => {
@@ -305,7 +310,7 @@ export default function Menu(props) {
     // Check the lockby name is null or not.
     console.log("run");
   };
-  console.log("this is cart items", cartItems);
+  // console.log("this is cart items", cartItems);
   return (
     <>
       <Navbar active="Choose Menu" />
