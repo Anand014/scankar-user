@@ -239,6 +239,7 @@ export default function Menu(props) {
       foodinfo:newCartItems
     }).then(res=>{
       setCartItems({...res.data.foodinfo[0]})
+      setDummyOrder({...res.data})
       setCartItemsInCookies({...res.data.foodinfo[0]});
     }).catch(err=>{
       console.log(err,"error report")
@@ -263,14 +264,25 @@ export default function Menu(props) {
     if (newCartItems[itemId]) {
       if (newCartItems[itemId] > 1) {
         newCartItems[itemId] = --newCartItems[itemId];
-        cookie.set("cart-items", newCartItems);
-        setCartItems(newCartItems);
-        return;
+        
+        
+      
       }
-      delete --newCartItems[itemId];
-      cookie.set("cart-items", newCartItems);
-      setCartItems(newCartItems);
+      else{
+      delete --newCartItems[itemId];}
+      
+      
     }
+    Axios.put("http://localhost:5000/api/v1/ordershare/adduserDummyOrder",{
+      id:dummyOrder._id,
+      foodinfo:newCartItems
+    }).then(res=>{
+      setCartItems({...res.data.foodinfo[0]})
+      setDummyOrder({...res.data})
+      setCartItemsInCookies({...res.data.foodinfo[0]});
+    }).catch(err=>{
+      console.log(err,"error report")
+    })
   };
 
   const handleDiscardCartItem = (itemId) => {
@@ -285,10 +297,17 @@ export default function Menu(props) {
     console.log("Cart items", newCartItems);
     if (newCartItems[itemId]) {
       delete newCartItems[itemId];
-      cookie.set("cart-items", newCartItems);
-      setCartItems(newCartItems);
-      return;
     }
+    Axios.put("http://localhost:5000/api/v1/ordershare/adduserDummyOrder",{
+      id:dummyOrder._id,
+      foodinfo:newCartItems
+    }).then(res=>{
+      setCartItems({...res.data.foodinfo[0]})
+      setDummyOrder({...res.data})
+      setCartItemsInCookies({...res.data.foodinfo[0]});
+    }).catch(err=>{
+      console.log(err,"error report")
+    })
   };
 
   const setCartItemsInCookies = (data) => {
