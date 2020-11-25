@@ -13,9 +13,7 @@ import {
   // Drawer,
   SwipeableDrawer,
   Button,
-  Chip,
 } from "@material-ui/core";
-import FaceIcon from "@material-ui/icons/Face";
 import { makeStyles } from "@material-ui/core/styles";
 // import Container from '@material-ui/core/Container';
 import KeyboardArrowUpIcon from "@material-ui/icons/KeyboardArrowUp";
@@ -163,14 +161,6 @@ const Navbar = (props) => {
           >
             create new order
           </Button>
-          <Chip
-            icon={<FaceIcon />}
-            label="Call Waiter"
-            variant="outlined"
-            clickable
-            // onClick={callWaiterHandle}
-            style={{ marginLeft: "auto" }}
-          />
           <IconButton
             style={{ marginLeft: "auto" }}
             color="inherit"

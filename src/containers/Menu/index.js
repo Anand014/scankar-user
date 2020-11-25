@@ -10,7 +10,10 @@ import {
   Grid,
   Button,
   Input,
+  LinearProgress,
+  Chip,
 } from "@material-ui/core";
+import FaceIcon from "@material-ui/icons/Face";
 import RefreshIcon from "@material-ui/icons/Refresh";
 import * as api from "../../api/orderAPI";
 import { useHistory } from "react-router-dom";
@@ -81,6 +84,8 @@ export default function Menu(props) {
   const [lockByToggle, setLockByToggle] = useState(false);
   const [LockByName, setLockByName] = useState("");
   const [dummyOrder, setDummyOrder] = useState({});
+  const [putToggle, setPutToggle] = useState(false);
+  const [NoDummyOrder, setNoDummyOrder] = useState(false);
 
   const username = cookie.get("username");
 
@@ -101,19 +106,11 @@ export default function Menu(props) {
     // }
     if (window.location.href.split("/").length === 6) {
       const id = window.location.href.split("/")[5];
-      api.getDummyOrder(id).then((res) => {
-        setDummyOrder(res.data.product);
-        setCartItems({ ...res.data.product.foodinfo[0] });
+      refreshDummyOrder(id);
+    }
 
-        setCartItemsInCookies({ ...res.data.product.foodinfo[0] });
-
-        if (username === res.data.product.lockBy) {
-          setLockByName(res.data.product.lockBy);
-        } else {
-          setLockByName(res.data.product.lockBy);
-          setLockByToggle(true);
-        }
-      });
+    if (window.location.href.split("/").length !== 6) {
+      setNoDummyOrder(true);
     }
 
     const { categories, items, value, data, clicked } = history.location.props
@@ -165,6 +162,32 @@ export default function Menu(props) {
         window.location.assign(window.location.href.replace("/menu", "/login"));
       });
   }, []);
+
+  const refreshDummyOrder = (id) => {
+    api.getDummyOrder(id).then((res) => {
+      setDummyOrder(res.data.product);
+      setCartItems({ ...res.data.product.foodinfo[0] });
+
+      setCartItemsInCookies({ ...res.data.product.foodinfo[0] });
+
+      if (username === res.data.product.lockBy) {
+        setLockByName(res.data.product.lockBy);
+        setLockByToggle(false);
+      } else {
+        setLockByName(res.data.product.lockBy);
+        setLockByToggle(true);
+      }
+      setPutToggle(false);
+    });
+  };
+
+  const putRequestHandler = (res) => {
+    setCartItems({ ...res.foodinfo[0] });
+    setDummyOrder({ ...res });
+    setCartItemsInCookies({ ...res.foodinfo[0] });
+    setPutToggle(false);
+  };
+
   const handleChange = (event, newValue) => {
     // const clicked = cookie.get("clicked")
     // console.log("handlechange", newValue, user, clicked, );
@@ -226,18 +249,26 @@ export default function Menu(props) {
           });
       }
     }
-
-    Axios.put("http://localhost:5000/api/v1/ordershare/adduserDummyOrder", {
-      id: dummyOrder._id,
-      foodinfo: newCartItems,
-    })
-      .then((res) => {
-        setCartItems({ ...res.data.foodinfo[0] });
-        setCartItemsInCookies({ ...res.data.foodinfo[0] });
-      })
-      .catch((err) => {
-        console.log(err, "error report");
-      });
+    try {
+      setPutToggle(true);
+      api
+        .adduserDummyOrder(dummyOrder._id, newCartItems)
+        .then((res) => {
+          putRequestHandler(res);
+        })
+        .catch((err) => {
+          setPutToggle(true);
+          console.log(err, "error report");
+          Swal.fire({
+            title: "Network Error",
+            icon: "error",
+          }).then(() => {
+            setPutToggle(false);
+          });
+        });
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   const handleRemoveCartItem = (itemId) => {
@@ -256,13 +287,29 @@ export default function Menu(props) {
     if (newCartItems[itemId]) {
       if (newCartItems[itemId] > 1) {
         newCartItems[itemId] = --newCartItems[itemId];
-        cookie.set("cart-items", newCartItems);
-        setCartItems(newCartItems);
-        return;
+      } else {
+        delete --newCartItems[itemId];
       }
-      delete --newCartItems[itemId];
-      cookie.set("cart-items", newCartItems);
-      setCartItems(newCartItems);
+    }
+    try {
+      setPutToggle(true);
+      api
+        .adduserDummyOrder(dummyOrder._id, newCartItems)
+        .then((res) => {
+          putRequestHandler(res);
+        })
+        .catch((err) => {
+          setPutToggle(true);
+          console.log(err, "error report");
+          Swal.fire({
+            title: "Network Error",
+            icon: "error",
+          }).then(() => {
+            setPutToggle(false);
+          });
+        });
+    } catch (error) {
+      console.log(error);
     }
   };
 
@@ -278,9 +325,25 @@ export default function Menu(props) {
     console.log("Cart items", newCartItems);
     if (newCartItems[itemId]) {
       delete newCartItems[itemId];
-      cookie.set("cart-items", newCartItems);
-      setCartItems(newCartItems);
-      return;
+    }
+    try {
+      setPutToggle(true);
+      api
+        .adduserDummyOrder(dummyOrder._id, newCartItems)
+        .then((res) => {
+          putRequestHandler(res);
+        })
+        .catch((err) => {
+          console.log(err, "error report");
+          Swal.fire({
+            title: "Network Error",
+            icon: "error",
+          }).then(() => {
+            setPutToggle(false);
+          });
+        });
+    } catch (error) {
+      console.log(error);
     }
   };
 
@@ -336,8 +399,15 @@ export default function Menu(props) {
     }
   };
   const refreshHandle = () => {
-    // Check the lockby name is null or not.
-    console.log("run");
+    if (window.location.href.split("/").length !== 6) {
+    } else {
+      setPutToggle(true);
+      refreshDummyOrder(dummyOrder._id);
+    }
+  };
+
+  const callWaiterHandle = () => {
+    console.log("call waiter");
   };
   // console.log("this is cart items", cartItems);
   return (
@@ -390,35 +460,66 @@ export default function Menu(props) {
               justify="flex-end"
               alignItems="center"
             >
+              <Chip
+                icon={<FaceIcon />}
+                label="Call Waiter"
+                variant="outlined"
+                clickable
+                style={{ marginRight: "1rem" }}
+                onClick={callWaiterHandle}
+              />
               <RefreshIcon
                 fontSize="large"
-                style={{ marginRight: "1rem" }}
+                style={{ marginRight: "1rem", cursor: "pointer" }}
                 onClick={refreshHandle}
               />
-              <Form onSubmit={handleLockBy}>
-                <Input
-                  disabled={lockByToggle}
-                  type="text"
-                  placeholder="Enter name"
-                  value={LockByName}
-                  onChange={(e) => setLockByName(e.target.value)}
-                />
-                <Button
-                  type="submit"
-                  disabled={lockByToggle}
-                  style={{ fontSize: "1rem", marginRight: "1.5rem" }}
+              {NoDummyOrder ? (
+                <Form
+                  onSubmit={handleLockBy}
+                  style={{ pointerEvents: "none", opacity: "0.7" }}
                 >
-                  LockBy
-                </Button>
-              </Form>
+                  <Input
+                    disabled={lockByToggle}
+                    type="text"
+                    placeholder="Enter name"
+                    value={LockByName}
+                    onChange={(e) => setLockByName(e.target.value)}
+                  />
+                  <Button
+                    type="submit"
+                    disabled={lockByToggle}
+                    style={{ fontSize: "1rem", marginRight: "1.5rem" }}
+                  >
+                    LockBy
+                  </Button>
+                </Form>
+              ) : (
+                <Form onSubmit={handleLockBy}>
+                  <Input
+                    disabled={lockByToggle}
+                    type="text"
+                    placeholder="Enter name"
+                    value={LockByName}
+                    onChange={(e) => setLockByName(e.target.value)}
+                  />
+                  <Button
+                    type="submit"
+                    disabled={lockByToggle}
+                    style={{ fontSize: "1rem", marginRight: "1.5rem" }}
+                  >
+                    LockBy
+                  </Button>
+                </Form>
+              )}
             </Grid>
           </AppBar>
+          {putToggle ? <LinearProgress /> : ""}
           {categories &&
             categories.map((category, index) => {
               // console.log("clicked", clickedCat)
               return (
                 <div>
-                  {lockByToggle ? (
+                  {lockByToggle || putToggle ? (
                     <div style={{ pointerEvents: "none", opacity: "0.7" }}>
                       <TabPanel value={value} index={index} key={index}>
                         {items[category] && (

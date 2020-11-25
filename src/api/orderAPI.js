@@ -42,6 +42,12 @@ export const changeLockByName = (id, LockByName, hotelId) => {
   return PutRequest(url, { id: id, username: LockByName, HotelId: hotelId });
 };
 
+export const adduserDummyOrder = (id, foodinfo) => {
+  console.log(foodinfo);
+  const url = server + "/ordershare/adduserDummyOrder";
+  return PutRequest(url, { id: id, foodinfo: foodinfo });
+};
+
 const GetRequest = (url) => {
   return new Promise(function (resolve, reject) {
     const obj = {
