@@ -22,6 +22,7 @@ import "./style.css";
 import Items from "../../components/Items";
 import { ControlLabel } from "rsuite";
 import { Form } from "semantic-ui-react";
+import Axios from "axios";
 function TabPanel(props) {
   const { children, value, index, ...other } = props;
 
@@ -208,7 +209,7 @@ export default function Menu(props) {
       newCartItems[itemId] = ++newCartItems[itemId];
       cookie.set("cart-items", newCartItems);
       console.log(newCartItems,"newcartItems")
-      setCartItems({...newCartItems});
+      
       
     }
     else{
@@ -231,8 +232,19 @@ export default function Menu(props) {
         .then((res) => {
           window.location.assign(`${window.location.href}/${res._id}`);
         });
-    }
-    setCartItems({...newCartItems});}
+    }}
+
+    Axios.put("http://localhost:5000/api/v1/ordershare/adduserDummyOrder",{
+      id:dummyOrder._id,
+      foodinfo:newCartItems
+    }).then(res=>{
+      setCartItems({...res.data.foodinfo[0]})
+      setCartItemsInCookies({...res.data.foodinfo[0]});
+    }).catch(err=>{
+      console.log(err,"error report")
+    })
+    
+
   };
 
   const handleRemoveCartItem = (itemId) => {
@@ -284,13 +296,6 @@ export default function Menu(props) {
       cookie.set("cart-items",JSON.stringify({...data}));
       return;
     }
-    // const existingCartItems = cookie.get("cart-items");
-    // if (existingCartItems) {
-    //   setCartItems(JSON.parse(existingCartItems));
-    //   return;
-    // }
-    // cookie.set("cart-items", {});
-    // setCartItems(JSON.parse(cookie.get("cart-items")));
   };
 
   const handleGetItems = async (category, index) => {
