@@ -22,6 +22,7 @@ import "./style.css";
 import Items from "../../components/Items";
 import { ControlLabel } from "rsuite";
 import { Form } from "semantic-ui-react";
+import Swal from "sweetalert2";
 function TabPanel(props) {
   const { children, value, index, ...other } = props;
 
@@ -101,7 +102,10 @@ export default function Menu(props) {
       const id = window.location.href.split("/")[5];
       api.getDummyOrder(id).then((res) => {
         setDummyOrder(res.data.product);
-        setCartItems(res.data.product.foodinfo[0]);
+        setCartItems({ ...res.data.product.foodinfo[0] });
+
+        setCartItemsInCookies({ ...res.data.product.foodinfo[0] });
+
         if (username === res.data.product.lockBy) {
           setLockByName(res.data.product.lockBy);
         } else {
@@ -151,7 +155,6 @@ export default function Menu(props) {
         setItems(newItems);
 
         setData(res.data.user.menu);
-        console.log(tempcategories, "tempcategories");
         setCategories(tempcategories);
         // setCartItemsInCookies();
       })
@@ -270,14 +273,18 @@ export default function Menu(props) {
     }
   };
 
-  const setCartItemsInCookies = () => {
-    const existingCartItems = cookie.get("cart-items");
-    if (existingCartItems) {
-      setCartItems(JSON.parse(existingCartItems));
+  const setCartItemsInCookies = (data) => {
+    if (Object.keys(data).length > 0) {
+      cookie.set("cart-items", JSON.stringify({ ...data }));
       return;
     }
-    cookie.set("cart-items", {});
-    setCartItems(JSON.parse(cookie.get("cart-items")));
+    // const existingCartItems = cookie.get("cart-items");
+    // if (existingCartItems) {
+    //   setCartItems(JSON.parse(existingCartItems));
+    //   return;
+    // }
+    // cookie.set("cart-items", {});
+    // setCartItems(JSON.parse(cookie.get("cart-items")));
   };
 
   const handleGetItems = async (category, index) => {
@@ -290,26 +297,38 @@ export default function Menu(props) {
     }
   };
   const handleLockBy = () => {
-    if (window.location.href.split("/").length === 6) {
-      const id = window.location.href.split("/")[5];
-      let hotelId = window.location.href.split("/")[4];
-      hotelId = hotelId.replace("take", "");
-      hotelId = hotelId.replace("dinein", "");
-      api
-        .changeLockByName(id, LockByName, hotelId)
-        .then(() => {
-          api.getDummyOrder(id).then((res) => {
-            if (username === res.data.product.lockBy) {
-              setLockByName(res.data.product.lockBy);
-            } else {
-              setLockByName(res.data.product.lockBy);
-              setLockByToggle(true);
-            }
-          });
-        })
-        .catch((err) => {
-          console.log(err, "lockby err");
-        });
+    if (LockByName.split("").length != 0) {
+      if (username === LockByName) {
+        Swal.fire({
+          title: "Enter Different Name",
+          icon: "info",
+        }).then(() => {});
+      } else {
+        if (window.location.href.split("/").length === 6) {
+          const id = window.location.href.split("/")[5];
+          let hotelId = window.location.href.split("/")[4];
+          hotelId = hotelId.replace("take", "");
+          hotelId = hotelId.replace("dinein", "");
+          api
+            .changeLockByName(id, LockByName, hotelId)
+            .then((res) => {
+              if (username === res.lockBy) {
+                setLockByName(res.lockBy);
+              } else {
+                setLockByName(res.lockBy);
+                setLockByToggle(true);
+              }
+            })
+            .catch((err) => {
+              console.log(err, "lockby err");
+            });
+        }
+      }
+    } else {
+      Swal.fire({
+        title: "Please Enter a Valid Name",
+        icon: "error",
+      }).then(() => {});
     }
   };
   const refreshHandle = () => {

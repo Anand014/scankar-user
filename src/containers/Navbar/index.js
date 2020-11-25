@@ -13,7 +13,9 @@ import {
   // Drawer,
   SwipeableDrawer,
   Button,
+  Chip,
 } from "@material-ui/core";
+import FaceIcon from "@material-ui/icons/Face";
 import { makeStyles } from "@material-ui/core/styles";
 // import Container from '@material-ui/core/Container';
 import KeyboardArrowUpIcon from "@material-ui/icons/KeyboardArrowUp";
@@ -25,6 +27,8 @@ import * as api from "../../api/orderAPI";
 import cookie from "js-cookie";
 import Swal from "sweetalert2";
 import { useParams } from "react-router-dom";
+import { Icon } from "semantic-ui-react";
+
 const useStyles = makeStyles((theme) => ({
   root: {
     position: "fixed",
@@ -159,7 +163,14 @@ const Navbar = (props) => {
           >
             create new order
           </Button>
-
+          <Chip
+            icon={<FaceIcon />}
+            label="Call Waiter"
+            variant="outlined"
+            clickable
+            // onClick={callWaiterHandle}
+            style={{ marginLeft: "auto" }}
+          />
           <IconButton
             style={{ marginLeft: "auto" }}
             color="inherit"
