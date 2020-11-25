@@ -78,13 +78,12 @@ export default function Menu(props) {
   const [data, setData] = useState(null);
   const [lockByToggle, setLockByToggle] = useState(false);
   const [LockByName, setLockByName] = useState("");
-  const [dummyOrder,setDummyOrder]=useState({});
+  const [dummyOrder, setDummyOrder] = useState({});
 
   const username = cookie.get("username");
 
   useEffect(() => {
     console.log("window.location", window.location.href.split("/"));
-    console.log(LockByName);
     // try {
     //   Axios.get(
     //     `http://localhost:5000/api/v1/ordershare/5fbc27d3b269175710d7f126`
@@ -101,8 +100,8 @@ export default function Menu(props) {
     if (window.location.href.split("/").length === 6) {
       const id = window.location.href.split("/")[5];
       api.getDummyOrder(id).then((res) => {
-        setDummyOrder(res.data.product)
-        setCartItems(res.data.product.foodinfo[0])
+        setDummyOrder(res.data.product);
+        setCartItems(res.data.product.foodinfo[0]);
         if (username === res.data.product.lockBy) {
           setLockByName(res.data.product.lockBy);
         } else {
@@ -115,7 +114,6 @@ export default function Menu(props) {
     const { categories, items, value, data, clicked } = history.location.props
       ? history.location.props
       : {};
-   
 
     if (items) {
       setCategories(categories);
@@ -199,37 +197,33 @@ export default function Menu(props) {
     newCartItems[itemId] = 1;
     setCartItems(newCartItems);*/
     const newCartItems = cartItems;
-    
 
     if (newCartItems[itemId]) {
       newCartItems[itemId] = ++newCartItems[itemId];
       cookie.set("cart-items", newCartItems);
-      console.log(newCartItems,"newcartItems")
-      setCartItems({...newCartItems});
-      
-    }
-    else{
+      console.log(newCartItems, "newcartItems");
+      setCartItems({ ...newCartItems });
+    } else {
+      newCartItems[itemId] = 1;
+      cookie.set("cart-items", newCartItems);
+      console.log(newCartItems, "newcartItems outside");
+      if (window.location.href.split("/").length === 5) {
+        let hotelId = window.location.href.split("/")[4];
+        hotelId = hotelId.replace("take", "");
+        hotelId = hotelId.replace("dinein", "");
 
-    
-    newCartItems[itemId] = 1;
-    cookie.set("cart-items", newCartItems);
-    console.log(newCartItems,"newcartItems outside")
-    if (window.location.href.split("/").length === 5 ) {
-      let hotelId = window.location.href.split("/")[4];
-      hotelId = hotelId.replace("take", "");
-      hotelId = hotelId.replace("dinein", "");
-
-      api
-        .createDummyOrder({
-          username: username,
-          foodinfo: newCartItems,
-          HotelId: hotelId,
-        })
-        .then((res) => {
-          window.location.assign(`${window.location.href}/${res._id}`);
-        });
+        api
+          .createDummyOrder({
+            username: username,
+            foodinfo: newCartItems,
+            HotelId: hotelId,
+          })
+          .then((res) => {
+            window.location.assign(`${window.location.href}/${res._id}`);
+          });
+      }
+      setCartItems({ ...newCartItems });
     }
-    setCartItems({...newCartItems});}
   };
 
   const handleRemoveCartItem = (itemId) => {
@@ -301,9 +295,21 @@ export default function Menu(props) {
       let hotelId = window.location.href.split("/")[4];
       hotelId = hotelId.replace("take", "");
       hotelId = hotelId.replace("dinein", "");
-      api.changeLockByName(id, LockByName, hotelId).then((res) => {
-        console.log(res.status);
-      });
+      api
+        .changeLockByName(id, LockByName, hotelId)
+        .then(() => {
+          api.getDummyOrder(id).then((res) => {
+            if (username === res.data.product.lockBy) {
+              setLockByName(res.data.product.lockBy);
+            } else {
+              setLockByName(res.data.product.lockBy);
+              setLockByToggle(true);
+            }
+          });
+        })
+        .catch((err) => {
+          console.log(err, "lockby err");
+        });
     }
   };
   const refreshHandle = () => {
