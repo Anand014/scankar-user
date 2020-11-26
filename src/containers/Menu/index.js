@@ -257,16 +257,19 @@ export default function Menu(props) {
           putRequestHandler(res);
         })
         .catch((err) => {
-          setPutToggle(true);
           console.log(err, "error report");
           Swal.fire({
-            title: "Network Error",
+            title: "Error Report",
             icon: "error",
-          }).then(() => {
-            setPutToggle(false);
-          });
+          }).then(() => {});
+          setPutToggle(false);
         });
     } catch (error) {
+      Swal.fire({
+        title: "Network Error",
+        icon: "error",
+      }).then(() => {});
+      setPutToggle(false);
       console.log(error);
     }
   };
@@ -302,14 +305,18 @@ export default function Menu(props) {
           setPutToggle(true);
           console.log(err, "error report");
           Swal.fire({
-            title: "Network Error",
+            title: "Error while updating Food",
             icon: "error",
-          }).then(() => {
-            setPutToggle(false);
-          });
+          }).then(() => {});
+          setPutToggle(false);
         });
     } catch (error) {
       console.log(error);
+      Swal.fire({
+        title: "Network Error",
+        icon: "error",
+      }).then(() => {});
+      setPutToggle(false);
     }
   };
 
@@ -336,14 +343,18 @@ export default function Menu(props) {
         .catch((err) => {
           console.log(err, "error report");
           Swal.fire({
-            title: "Network Error",
+            title: "Error While Removing Cart Items",
             icon: "error",
-          }).then(() => {
-            setPutToggle(false);
-          });
+          }).then(() => {});
+          setPutToggle(false);
         });
     } catch (error) {
       console.log(error);
+      Swal.fire({
+        title: "Network Error",
+        icon: "error",
+      }).then(() => {});
+      setPutToggle(false);
     }
   };
 
