@@ -15,6 +15,7 @@ import {
 } from "@material-ui/core";
 import FaceIcon from "@material-ui/icons/Face";
 import RefreshIcon from "@material-ui/icons/Refresh";
+import FileCopyIcon from "@material-ui/icons/FileCopy";
 import * as api from "../../api/orderAPI";
 import { useHistory } from "react-router-dom";
 import Navbar from "../Navbar";
@@ -88,6 +89,7 @@ export default function Menu(props) {
   const [NoDummyOrder, setNoDummyOrder] = useState(false);
 
   const username = cookie.get("username");
+  const myRef = useRef();
 
   useEffect(() => {
     console.log("window.location", window.location.href.split("/"));
@@ -417,6 +419,17 @@ export default function Menu(props) {
     }
   };
 
+  const urlcopyHandler = () => {
+    //copy current url
+    var dummy = document.createElement("input"),
+      text = window.location.href;
+    document.body.appendChild(dummy);
+    dummy.value = text;
+    dummy.select();
+    document.execCommand("copy");
+    document.body.removeChild(dummy);
+  };
+
   const callWaiterHandle = () => {
     console.log("call waiter");
   };
@@ -471,12 +484,16 @@ export default function Menu(props) {
               justify="flex-end"
               alignItems="center"
             >
+              <FileCopyIcon
+                onClick={urlcopyHandler}
+                style={{ cursor: "pointer" }}
+              />
               <Chip
                 icon={<FaceIcon />}
                 label="Call Waiter"
                 variant="outlined"
                 clickable
-                style={{ marginRight: "1rem" }}
+                style={{ marginRight: "1rem", marginLeft: "1rem" }}
                 onClick={callWaiterHandle}
               />
               <RefreshIcon
