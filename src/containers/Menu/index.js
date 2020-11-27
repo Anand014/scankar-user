@@ -266,10 +266,6 @@ export default function Menu(props) {
           setPutToggle(false);
         });
     } catch (error) {
-      Swal.fire({
-        title: "Network Error",
-        icon: "error",
-      }).then(() => {});
       setPutToggle(false);
       console.log(error);
     }
