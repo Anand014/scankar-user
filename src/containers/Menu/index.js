@@ -170,7 +170,7 @@ export default function Menu(props) {
 
       setCartItemsInCookies({ ...res.data.product.foodinfo[0] });
 
-      if (username === res.data.product.lockBy) {
+      if (username.toUpperCase() === res.data.product.lockBy.toUpperCase()) {
         setLockByName(res.data.product.lockBy);
         setLockByToggle(false);
       } else {
@@ -365,7 +365,7 @@ export default function Menu(props) {
   };
   const handleLockBy = () => {
     if (LockByName.split("").length != 0) {
-      if (username === LockByName) {
+      if (username.toUpperCase() === LockByName.toUpperCase()) {
         Swal.fire({
           title: "Enter Different Name",
           icon: "info",
