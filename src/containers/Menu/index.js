@@ -15,6 +15,7 @@ import {
 } from "@material-ui/core";
 import FaceIcon from "@material-ui/icons/Face";
 import RefreshIcon from "@material-ui/icons/Refresh";
+import FileCopyIcon from "@material-ui/icons/FileCopy";
 import * as api from "../../api/orderAPI";
 import { useHistory } from "react-router-dom";
 import Navbar from "../Navbar";
@@ -257,16 +258,19 @@ export default function Menu(props) {
           putRequestHandler(res);
         })
         .catch((err) => {
-          setPutToggle(true);
           console.log(err, "error report");
           Swal.fire({
-            title: "Network Error",
+            title: "Error Report",
             icon: "error",
-          }).then(() => {
-            setPutToggle(false);
-          });
+          }).then(() => {});
+          setPutToggle(false);
         });
     } catch (error) {
+      Swal.fire({
+        title: "Network Error",
+        icon: "error",
+      }).then(() => {});
+      setPutToggle(false);
       console.log(error);
     }
   };
@@ -302,14 +306,18 @@ export default function Menu(props) {
           setPutToggle(true);
           console.log(err, "error report");
           Swal.fire({
-            title: "Network Error",
+            title: "Error while updating Food",
             icon: "error",
-          }).then(() => {
-            setPutToggle(false);
-          });
+          }).then(() => {});
+          setPutToggle(false);
         });
     } catch (error) {
       console.log(error);
+      Swal.fire({
+        title: "Network Error",
+        icon: "error",
+      }).then(() => {});
+      setPutToggle(false);
     }
   };
 
@@ -336,14 +344,18 @@ export default function Menu(props) {
         .catch((err) => {
           console.log(err, "error report");
           Swal.fire({
-            title: "Network Error",
+            title: "Error While Removing Cart Items",
             icon: "error",
-          }).then(() => {
-            setPutToggle(false);
-          });
+          }).then(() => {});
+          setPutToggle(false);
         });
     } catch (error) {
       console.log(error);
+      Swal.fire({
+        title: "Network Error",
+        icon: "error",
+      }).then(() => {});
+      setPutToggle(false);
     }
   };
 
@@ -406,6 +418,17 @@ export default function Menu(props) {
     }
   };
 
+  const urlcopyHandler = () => {
+    //copy current url
+    var dummy = document.createElement("input"),
+      text = window.location.href;
+    document.body.appendChild(dummy);
+    dummy.value = text;
+    dummy.select();
+    document.execCommand("copy");
+    document.body.removeChild(dummy);
+  };
+
   const callWaiterHandle = () => {
     console.log("call waiter");
   };
@@ -460,12 +483,16 @@ export default function Menu(props) {
               justify="flex-end"
               alignItems="center"
             >
+              <FileCopyIcon
+                onClick={urlcopyHandler}
+                style={{ cursor: "pointer" }}
+              />
               <Chip
                 icon={<FaceIcon />}
                 label="Call Waiter"
                 variant="outlined"
                 clickable
-                style={{ marginRight: "1rem" }}
+                style={{ marginRight: "1rem", marginLeft: "1rem" }}
                 onClick={callWaiterHandle}
               />
               <RefreshIcon
