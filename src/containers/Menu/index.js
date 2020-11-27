@@ -89,7 +89,6 @@ export default function Menu(props) {
   const [NoDummyOrder, setNoDummyOrder] = useState(false);
 
   const username = cookie.get("username");
-  const myRef = useRef();
 
   useEffect(() => {
     console.log("window.location", window.location.href.split("/"));
