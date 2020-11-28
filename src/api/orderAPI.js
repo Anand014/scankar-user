@@ -1,6 +1,6 @@
 import Api from "./Api";
 
-const server = "http://15.206.164.96:5000/api/v1";
+const server = "http://192.168.1.101:5000/api/v1";
 
 export const getMenu = (data) => {
   const url = server + `/users/${data}`;
