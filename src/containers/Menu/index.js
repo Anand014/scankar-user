@@ -89,7 +89,6 @@ export default function Menu(props) {
   const [NoDummyOrder, setNoDummyOrder] = useState(false);
 
   const username = cookie.get("username");
-
   useEffect(() => {
     console.log("window.location", window.location.href.split("/"));
     // try {
@@ -185,6 +184,7 @@ export default function Menu(props) {
   const putRequestHandler = (res) => {
     setCartItems({ ...res.foodinfo[0] });
     setDummyOrder({ ...res });
+    console.log("this is dummyorder on put request", dummyOrder);
     setCartItemsInCookies({ ...res.foodinfo[0] });
     setPutToggle(false);
   };
@@ -381,7 +381,7 @@ export default function Menu(props) {
     }
   };
   const handleLockBy = () => {
-    if (LockByName.split("").length != 0) {
+    if (LockByName.split("").length !== 0) {
       if (username.toUpperCase() === LockByName.toUpperCase()) {
         Swal.fire({
           title: "Enter Different Name",

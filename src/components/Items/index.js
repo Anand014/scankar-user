@@ -10,7 +10,9 @@ import {
   List,
   Avatar,
   Grid,
+  Box,
 } from "@material-ui/core";
+import ArrowForwardIosIcon from "@material-ui/icons/ArrowForwardIos";
 import FolderIcon from "@material-ui/icons/Folder";
 import "./style.css";
 import EditIcon from "@material-ui/icons/Edit";
@@ -79,7 +81,7 @@ export default function InteractiveList(props) {
   return (
     <div>
       {/* <Grid container spacing={2}> */}
-      <Grid >
+      <Grid>
         {/* <Typography variant="h6" className={classes.title}>
             Avatar with text and icon
           </Typography> */}
@@ -102,12 +104,10 @@ export default function InteractiveList(props) {
                   </ListItemAvatar>
                   <ListItemText
                     primary={item.name}
-                    secondary={
-                      "Rs." +
-                      item.price}
-                      // (props.cartItems[item._id]
-                      //   ? ` x${props.cartItems[item._id]}`
-                      //   : "")
+                    secondary={"Rs." + item.price}
+                    // (props.cartItems[item._id]
+                    //   ? ` x${props.cartItems[item._id]}`
+                    //   : "")
                     // }
                   />
                   {/* <ListItemSecondaryAction> */}
@@ -135,12 +135,15 @@ export default function InteractiveList(props) {
                       onClick={(e) => props.handleAddCartItem(item._id)}
                     />
 
-                          <Button className="total_items"
-                          // secondary=
-                            // onClick={(e) => handleAddCartItem(id)}
-                >{ (props.cartItems[item._id]
-                  ? `${props.cartItems[item._id]}`
-                  : "")}</Button>
+                    <Button
+                      className="total_items"
+                      // secondary=
+                      // onClick={(e) => handleAddCartItem(id)}
+                    >
+                      {props.cartItems[item._id]
+                        ? `${props.cartItems[item._id]}`
+                        : ""}
+                    </Button>
                     <Button
                       icon="minus"
                       onClick={(e) => props.handleRemoveCartItem(item._id)}
@@ -157,13 +160,50 @@ export default function InteractiveList(props) {
           </List>
         </div>
         <div className="addcard_wrapper">
-          <Fab
+          <Grid container direction="row" justify="center" alignItems="center">
+            <Grid item style={{ marginTop: "1.5rem", marginRight: "10rem" }}>
+              <h2>
+                <ArrowForwardIosIcon fontSize="small" /> Your Items (
+                {items.map((item) => props.cartItems[item._id])})
+              </h2>
+            </Grid>
+            <Grid item style={{ marginTop: "1.5rem", marginLeft: "10rem" }}>
+              <Button
+                variant="contained"
+                size="medium"
+                style={{
+                  color: "#ffffff",
+                  background: "#c5a51f",
+                  paddingLeft: "4rem",
+                  paddingRight: "4rem",
+                }}
+                onClick={(e) =>
+                  history.push({
+                    pathname: "/cart/cart",
+                    props: {
+                      items: props.cartItems,
+                      allItems: props.data,
+                      utilFuncs: {
+                        handleAddCartItem: props.handleAddCartItem,
+                        handleRemoveCartItem: props.handleRemoveCartItem,
+                        handleDIscardCartItem: props.handleDIscardCartItem,
+                      },
+                    },
+                  })
+                }
+              >
+                {" "}
+                Go to Cart
+              </Button>
+            </Grid>
+          </Grid>
+          {/* <Fab
             style={{ color: "#ffffff", background: "#c5a51f" }}
             aria-label={fabs.label}
             className={fabs.className}
             color={fabs.color}
           >
-            {/* {fabs.copyWithinicon} */}
+            {fabs.copyWithinicon}
             <AddShoppingCartIcon
               onClick={(e) =>
                 history.push({
@@ -179,8 +219,8 @@ export default function InteractiveList(props) {
                   },
                 })
               }
-            />
-          </Fab>
+            /> */}
+          {/* </Fab> */}
         </div>
       </Grid>
       {/* </Grid> */}
