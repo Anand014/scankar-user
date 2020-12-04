@@ -250,28 +250,30 @@ export default function Menu(props) {
           });
       }
     }
-    try {
-      setPutToggle(true);
-      api
-        .adduserDummyOrder(dummyOrder._id, newCartItems)
-        .then((res) => {
-          putRequestHandler(res);
-        })
-        .catch((err) => {
-          console.log(err, "error report");
-          Swal.fire({
-            title: "Error Report",
-            icon: "error",
-          }).then(() => {});
-          setPutToggle(false);
-        });
-    } catch (error) {
-      Swal.fire({
-        title: "Network Error",
-        icon: "error",
-      }).then(() => {});
-      setPutToggle(false);
-      console.log(error);
+    if (window.location.href.split("/").length === 6) {
+      try {
+        setPutToggle(true);
+        api
+          .adduserDummyOrder(dummyOrder._id, newCartItems)
+          .then((res) => {
+            putRequestHandler(res);
+          })
+          .catch((err) => {
+            console.log(err, "error report");
+            Swal.fire({
+              title: "Error Report",
+              icon: "error",
+            }).then(() => {});
+            setPutToggle(false);
+          });
+      } catch (error) {
+        Swal.fire({
+          title: "Network Error",
+          icon: "error",
+        }).then(() => {});
+        setPutToggle(false);
+        console.log(error);
+      }
     }
   };
 
@@ -295,32 +297,33 @@ export default function Menu(props) {
         delete --newCartItems[itemId];
       }
     }
-    try {
-      setPutToggle(true);
-      api
-        .adduserDummyOrder(dummyOrder._id, newCartItems)
-        .then((res) => {
-          putRequestHandler(res);
-        })
-        .catch((err) => {
-          setPutToggle(true);
-          console.log(err, "error report");
-          Swal.fire({
-            title: "Error while updating Food",
-            icon: "error",
-          }).then(() => {});
-          setPutToggle(false);
-        });
-    } catch (error) {
-      console.log(error);
-      Swal.fire({
-        title: "Network Error",
-        icon: "error",
-      }).then(() => {});
-      setPutToggle(false);
+    if (window.location.href.split("/").length === 6) {
+      try {
+        setPutToggle(true);
+        api
+          .adduserDummyOrder(dummyOrder._id, newCartItems)
+          .then((res) => {
+            putRequestHandler(res);
+          })
+          .catch((err) => {
+            setPutToggle(true);
+            console.log(err, "error report");
+            Swal.fire({
+              title: "Error while updating Food",
+              icon: "error",
+            }).then(() => {});
+            setPutToggle(false);
+          });
+      } catch (error) {
+        console.log(error);
+        Swal.fire({
+          title: "Network Error",
+          icon: "error",
+        }).then(() => {});
+        setPutToggle(false);
+      }
     }
   };
-
   const handleDiscardCartItem = (itemId) => {
     /*  const newCartItems = { ...cartItems };
     if (newCartItems[itemId]) {
@@ -334,28 +337,30 @@ export default function Menu(props) {
     if (newCartItems[itemId]) {
       delete newCartItems[itemId];
     }
-    try {
-      setPutToggle(true);
-      api
-        .adduserDummyOrder(dummyOrder._id, newCartItems)
-        .then((res) => {
-          putRequestHandler(res);
-        })
-        .catch((err) => {
-          console.log(err, "error report");
-          Swal.fire({
-            title: "Error While Removing Cart Items",
-            icon: "error",
-          }).then(() => {});
-          setPutToggle(false);
-        });
-    } catch (error) {
-      console.log(error);
-      Swal.fire({
-        title: "Network Error",
-        icon: "error",
-      }).then(() => {});
-      setPutToggle(false);
+    if (window.location.href.split("/").length === 6) {
+      try {
+        setPutToggle(true);
+        api
+          .adduserDummyOrder(dummyOrder._id, newCartItems)
+          .then((res) => {
+            putRequestHandler(res);
+          })
+          .catch((err) => {
+            console.log(err, "error report");
+            Swal.fire({
+              title: "Error While Removing Cart Items",
+              icon: "error",
+            }).then(() => {});
+            setPutToggle(false);
+          });
+      } catch (error) {
+        console.log(error);
+        Swal.fire({
+          title: "Network Error",
+          icon: "error",
+        }).then(() => {});
+        setPutToggle(false);
+      }
     }
   };
 
