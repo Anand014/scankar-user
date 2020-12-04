@@ -43,13 +43,13 @@ export default function SimpleTable() {
 
   const setCartItemsInCookies = () => {
     let existingCartItems = cookie.get("cart-items");
-    existingCartItems=JSON.parse(existingCartItems);
-    let filterCartItem={};
-    Object.keys(existingCartItems).map(item=>{
-        if(existingCartItems[item]!==0){
-          filterCartItem[item]=existingCartItems[item]
-        }
-    })
+    existingCartItems = JSON.parse(existingCartItems);
+    let filterCartItem = {};
+    Object.keys(existingCartItems).map((item) => {
+      if (existingCartItems[item] !== 0) {
+        filterCartItem[item] = existingCartItems[item];
+      }
+    });
     if (filterCartItem) {
       setCartItems(filterCartItem);
       return;

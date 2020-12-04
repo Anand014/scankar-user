@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import {
   ButtonGroup,
@@ -12,6 +12,7 @@ import {
   Grid,
   Box,
 } from "@material-ui/core";
+import cookie from "js-cookie";
 import ArrowForwardIosIcon from "@material-ui/icons/ArrowForwardIos";
 import FolderIcon from "@material-ui/icons/Folder";
 import "./style.css";
@@ -54,10 +55,51 @@ const useStyles = makeStyles((theme) => ({
 
 export default function InteractiveList(props) {
   const classes = useStyles(); //    useStyles()---> this is style function
+  const [yourItems, setYourItems] = useState(0);
+  const [price, setPrice] = useState(0);
+  const [ClearToggleButton, setClearToggleButton] = useState(false);
   const [dense] = React.useState(false);
-  const { items } = props;
+  const { items, data } = props;
   const history = useHistory();
-  console.log("this is items", { items });
+  console.log("this is data", data);
+
+  useEffect(() => {
+    if (window.location.href.split("/").length === 6) {
+      let existingCartItems = cookie.get("cart-items");
+      existingCartItems = JSON.parse(existingCartItems);
+      let totalItemCount = 0;
+      let totalPrice = 0;
+      let filterCartItem = {};
+      Object.keys(existingCartItems).map((id) => {
+        if (existingCartItems[id] !== 0) {
+          filterCartItem[id] = existingCartItems[id];
+          totalItemCount += existingCartItems[id];
+          let allItems = data
+            ? data.find(((data) => data._id === id) || "")
+            : [];
+          if (allItems) {
+            totalPrice += allItems.price * filterCartItem[id];
+          }
+        }
+      });
+      setPrice(totalPrice);
+      setYourItems(totalItemCount);
+      if (totalPrice > 0) {
+        setClearToggleButton(true);
+      } else {
+        setClearToggleButton(false);
+      }
+    }
+  });
+
+  const handleClearCart = () => {
+    cookie.set("cart-items", {});
+    if (window.location.href.split("/").length === 6) {
+      let idd = window.location.href.split("/")[4];
+      window.location.assign(`http://localhost:3000/menu/${idd}`);
+    }
+  };
+
   const fabs = [
     {
       color: "primary",
@@ -163,11 +205,21 @@ export default function InteractiveList(props) {
           <Grid container direction="row" justify="center" alignItems="center">
             <Grid item style={{ marginTop: "1.5rem", marginRight: "10rem" }}>
               <h2>
-                <ArrowForwardIosIcon fontSize="small" /> Your Items (
-                {items.map((item) => props.cartItems[item._id])})
+                <ArrowForwardIosIcon fontSize="small" /> Your Items ({yourItems}
+                )
               </h2>
             </Grid>
-            <Grid item style={{ marginTop: "1.5rem", marginLeft: "10rem" }}>
+            <Grid item style={{ marginTop: "1.5rem", marginRight: "2rem" }}>
+              <h2>Subtotal: ₹{price}</h2>
+            </Grid>
+            {ClearToggleButton ? (
+              <Grid item style={{ marginTop: "1.5rem", marginRight: "2rem" }}>
+                <Button onClick={handleClearCart}>Clear Cart</Button>
+              </Grid>
+            ) : (
+              ""
+            )}
+            <Grid item style={{ marginTop: "1.5rem" }}>
               <Button
                 variant="contained"
                 size="medium"

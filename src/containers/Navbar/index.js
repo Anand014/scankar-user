@@ -137,7 +137,8 @@ const Navbar = (props) => {
     let orderRoute = window.location.href.split("/")[3];
     orderRoute = orderRoute.replace("menu", "overview");
     console.log(orderRoute);
-    window.location.assign(`http://15.206.164.96:3000/${orderRoute}/${idd}`);
+    cookie.set("cart-items", {});
+    window.location.assign(`http://localhost:3000/${orderRoute}/${idd}`);
   };
 
   return (
