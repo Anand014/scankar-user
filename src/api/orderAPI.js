@@ -1,6 +1,6 @@
 import Api from "./Api";
 
-const server = "http://ec2-15-206-210-224.ap-south-1.compute.amazonaws.com:5000/api/v1";
+const server = "http://localhost:5000/api/v1";
 
 export const getMenu = (data) => {
   const url = server + `/users/${data}`;
