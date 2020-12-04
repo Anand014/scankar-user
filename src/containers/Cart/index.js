@@ -42,9 +42,16 @@ export default function SimpleTable() {
   let totalPrice = 0;
 
   const setCartItemsInCookies = () => {
-    const existingCartItems = cookie.get("cart-items");
-    if (existingCartItems) {
-      setCartItems(JSON.parse(existingCartItems));
+    let existingCartItems = cookie.get("cart-items");
+    existingCartItems=JSON.parse(existingCartItems);
+    let filterCartItem={};
+    Object.keys(existingCartItems).map(item=>{
+        if(existingCartItems[item]!==0){
+          filterCartItem[item]=existingCartItems[item]
+        }
+    })
+    if (filterCartItem) {
+      setCartItems(filterCartItem);
       return;
     }
     cookie.set("cart-items", {});
