@@ -42,18 +42,15 @@ export const changeLockByName = (id, LockByName, hotelId) => {
   return PutRequest(url, { id: id, username: LockByName, HotelId: hotelId });
 };
 
-export const adduserDummyOrder = (id, foodinfo) => {
+export const adduserDummyOrder = (id, foodinfo, username) => {
   console.log(foodinfo);
   const url = server + "/ordershare/adduserDummyOrder";
-  return PutRequest(url, { id: id, foodinfo: foodinfo });
+  return PutRequest(url, { id: id, foodinfo: foodinfo, username: username });
 };
 
-export const waiterOnCall = ({ hotelId, username }) => {
-  const url = server + `/woc/${hotelId}/${username}`;
-  return GetRequest(url, {
-    hotelId,
-    username,
-  });
+export const waiterOnCall = (id, username) => {
+  const url = server + `/woc/${id}/${username}`;
+  return GetRequest(url);
 };
 
 const GetRequest = (url) => {

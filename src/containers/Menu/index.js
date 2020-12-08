@@ -254,7 +254,7 @@ export default function Menu(props) {
       try {
         setPutToggle(true);
         api
-          .adduserDummyOrder(dummyOrder._id, newCartItems)
+          .adduserDummyOrder(dummyOrder._id, newCartItems, username)
           .then((res) => {
             putRequestHandler(res);
           })
@@ -301,7 +301,7 @@ export default function Menu(props) {
       try {
         setPutToggle(true);
         api
-          .adduserDummyOrder(dummyOrder._id, newCartItems)
+          .adduserDummyOrder(dummyOrder._id, newCartItems, username)
           .then((res) => {
             putRequestHandler(res);
           })
@@ -341,7 +341,7 @@ export default function Menu(props) {
       try {
         setPutToggle(true);
         api
-          .adduserDummyOrder(dummyOrder._id, newCartItems)
+          .adduserDummyOrder(dummyOrder._id, newCartItems, username)
           .then((res) => {
             putRequestHandler(res);
           })
@@ -438,6 +438,7 @@ export default function Menu(props) {
     let hotelId = window.location.href.split("/")[4];
     hotelId = hotelId.replace("take", "");
     hotelId = hotelId.replace("dinein", "");
+    console.log(hotelId, username, "callwaitrr");
     try {
       api.waiterOnCall(hotelId, username).then((res) => {
         console.log(res);
