@@ -33,7 +33,7 @@ export const createDummyOrder = ({ username, foodinfo, hotelId }) => {
 };
 
 export const getDummyOrder = (id) => {
-  const url = server + `/ordershare/${id}`;
+  const url = server + `/ordershare/getDummyorder/${id}`;
   return GetRequest(url);
 };
 
