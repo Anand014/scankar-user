@@ -5,6 +5,7 @@ import Aux from '../../hoc/_Aux';
 import * as actionTypes from '../../store/actions/actionTypes';
 import routes from '../../routes';
 import config from '../../config';
+import cookie from "js-cookie";
 import Loader from '../../components/Loader';
 import "./app.scss";
 const Home = React.lazy(() => import('../../containers/Home'));
@@ -16,7 +17,10 @@ const Menu = React.lazy(() => import('../../containers/Menu'));
 const Layout = props => {
   if(props.location.pathname){
     let pathname=props.location.pathname;
-    if(!pathname.includes("login")){
+    console.log("condition for pathname",(!pathname.includes("login")),pathname)
+    console.log("condition for username",(cookie.get("username")))
+    console.log("condition for login route",(!pathname.includes("login") && !cookie.get("username")))
+    if(!pathname.includes("login") && !cookie.get("userId")){
       window.location.assign(`http://${window.location.host}/login${pathname}`);
     }
   }
