@@ -14,6 +14,12 @@ const Menu = React.lazy(() => import('../../containers/Menu'));
 
 
 const Layout = props => {
+  if(props.location.pathname){
+    let pathname=props.location.pathname;
+    if(!pathname.includes("login")){
+      window.location.assign(`http://${window.location.host}/login${pathname}`);
+    }
+  }
 
   const menu =  () => {
     const RoutesArr = routes.map((route, index) => {
