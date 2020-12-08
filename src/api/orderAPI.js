@@ -48,6 +48,14 @@ export const adduserDummyOrder = (id, foodinfo) => {
   return PutRequest(url, { id: id, foodinfo: foodinfo });
 };
 
+export const waiterOnCall = ({ hotelId, username }) => {
+  const url = server + `/woc/${hotelId}/${username}`;
+  return GetRequest(url, {
+    hotelId,
+    username,
+  });
+};
+
 const GetRequest = (url) => {
   return new Promise(function (resolve, reject) {
     const obj = {

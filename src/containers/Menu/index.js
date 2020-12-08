@@ -435,7 +435,14 @@ export default function Menu(props) {
   };
 
   const callWaiterHandle = () => {
-    console.log("call waiter");
+    let hotelId = window.location.href.split("/")[4];
+    hotelId = hotelId.replace("take", "");
+    hotelId = hotelId.replace("dinein", "");
+    try {
+      api.waiterOnCall(hotelId, username).then((res) => {
+        console.log(res);
+      });
+    } catch (error) {}
   };
   // console.log("this is cart items", cartItems);
   return (
