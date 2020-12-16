@@ -438,12 +438,28 @@ export default function Menu(props) {
     let hotelId = window.location.href.split("/")[4];
     hotelId = hotelId.replace("take", "");
     hotelId = hotelId.replace("dinein", "");
-    console.log(hotelId, username, "callwaitrr");
     try {
-      api.waiterOnCall(hotelId, username).then((res) => {
-        console.log(res);
-      });
-    } catch (error) {}
+      api
+        .waiterOnCall(hotelId, username)
+        .then((res) => {
+          Swal.fire({
+            icon: "success",
+            title: "Waiter On Call",
+            showConfirmButton: false,
+            timer: 1500,
+          });
+        })
+        .catch((err) => {
+          Swal.fire({
+            icon: "error",
+            title: "Waiter Not Found",
+            showConfirmButton: false,
+            timer: 1500,
+          });
+        });
+    } catch (error) {
+      console.log(error);
+    }
   };
   // console.log("this is cart items", cartItems);
   return (

@@ -1,6 +1,6 @@
 import Api from "./Api";
 
-const server = "http://localhost:5000/api/v1";
+const server = "https://backend.scankar.com/api/v1";
 
 export const getMenu = (data) => {
   const url = server + `/users/${data}`;
@@ -49,7 +49,7 @@ export const adduserDummyOrder = (id, foodinfo, username) => {
 };
 
 export const waiterOnCall = (id, username) => {
-  const url = server + `/woc/${id}/${username}`;
+  const url = server + `/customer-order/woc/${id}/${username}`;
   return GetRequest(url);
 };
 
