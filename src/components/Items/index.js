@@ -24,6 +24,7 @@ import AddShoppingCartIcon from "@material-ui/icons/AddShoppingCart";
 import Fab from "@material-ui/core/Fab";
 import { useHistory } from "react-router";
 import { Button } from "semantic-ui-react";
+import * as api from "../../api/orderAPI";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -62,6 +63,7 @@ export default function InteractiveList(props) {
   const { items, data } = props;
   const history = useHistory();
   console.log("this is data", data);
+  const username = cookie.get("username");
 
   useEffect(() => {
     if (window.location.href.split("/").length === 6) {
@@ -93,12 +95,25 @@ export default function InteractiveList(props) {
   });
 
   const handleClearCart = () => {
-    props.setCartItems({});
-    cookie.set("cart-items", {});
-    setYourItems(0);
-    setPrice(0);
-    let hotelId = window.location.href.split("/")[4];
-    history.replace(`/menu/${hotelId}`);
+    if (window.location.href.split("/").length === 6) {
+      const dummyOrderId = window.location.href.split("/")[5];
+      let foodinfo = {};
+      try {
+        api
+          .adduserDummyOrder(dummyOrderId, foodinfo, username)
+          .then((res) => {
+            console.log(res, "clear cart");
+            props.putRequestHandler(res);
+            setYourItems(0);
+            setPrice(0);
+          })
+          .catch((err) => {
+            console.log(err);
+          });
+      } catch (error) {
+        console.log(error);
+      }
+    }
   };
 
   const fabs = [
