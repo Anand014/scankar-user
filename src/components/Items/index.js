@@ -93,11 +93,12 @@ export default function InteractiveList(props) {
   });
 
   const handleClearCart = () => {
+    props.setCartItems({});
     cookie.set("cart-items", {});
-    if (window.location.href.split("/").length === 6) {
-      let idd = window.location.href.split("/")[4];
-      window.location.assign(`http://localhost:3000/menu/${idd}`);
-    }
+    setYourItems(0);
+    setPrice(0);
+    let hotelId = window.location.href.split("/")[4];
+    history.replace(`/menu/${hotelId}`);
   };
 
   const fabs = [
@@ -202,32 +203,42 @@ export default function InteractiveList(props) {
           </List>
         </div>
         <div className="addcard_wrapper">
-          <Grid container direction="row" justify="center" alignItems="center">
-            <Grid item style={{ marginTop: "1.5rem", marginRight: "10rem" }}>
+          <Grid
+            container
+            direction="row"
+            justify="center"
+            alignItems="center"
+            className="wrapperItems"
+          >
+            <Grid item>
               <h2>
                 <ArrowForwardIosIcon fontSize="small" /> Your Items ({yourItems}
                 )
               </h2>
             </Grid>
-            <Grid item style={{ marginTop: "1.5rem", marginRight: "2rem" }}>
+            <Grid
+              item
+              style={{
+                marginLeft: "2rem",
+                marginRight: "2rem",
+              }}
+            >
               <h2>Subtotal: ₹{price}</h2>
             </Grid>
             {ClearToggleButton ? (
-              <Grid item style={{ marginTop: "1.5rem", marginRight: "2rem" }}>
+              <Grid item style={{ marginRight: "2rem" }}>
                 <Button onClick={handleClearCart}>Clear Cart</Button>
               </Grid>
             ) : (
               ""
             )}
-            <Grid item style={{ marginTop: "1.5rem" }}>
+            <Grid item>
               <Button
                 variant="contained"
                 size="medium"
                 style={{
                   color: "#ffffff",
                   background: "#c5a51f",
-                  paddingLeft: "4rem",
-                  paddingRight: "4rem",
                 }}
                 onClick={(e) =>
                   history.push({

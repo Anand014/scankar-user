@@ -77,7 +77,6 @@ export default function Menu(props) {
   const [categories, setCategories] = useState([]);
   const [items, setItems] = useState({});
   const [cartItems, setCartItems] = useState({});
-  const history = useHistory();
   const [clicked, clickedCategory] = useState(0);
   const [clickedCat, setclickedCategory] = useState({});
   const [user, setUser] = useState(cookie.get("userId"));
@@ -87,6 +86,7 @@ export default function Menu(props) {
   const [dummyOrder, setDummyOrder] = useState({});
   const [putToggle, setPutToggle] = useState(false);
   const [NoDummyOrder, setNoDummyOrder] = useState(false);
+  const history = useHistory();
 
   const username = cookie.get("username");
   useEffect(() => {
@@ -182,9 +182,9 @@ export default function Menu(props) {
   };
 
   const putRequestHandler = (res) => {
+    setLockByName(res.lockBy);
     setCartItems({ ...res.foodinfo[0] });
     setDummyOrder({ ...res });
-    console.log("this is dummyorder on put request", dummyOrder);
     setCartItemsInCookies({ ...res.foodinfo[0] });
     setPutToggle(false);
   };
@@ -238,7 +238,7 @@ export default function Menu(props) {
         let hotelId = window.location.href.split("/")[4];
         hotelId = hotelId.replace("take", "");
         hotelId = hotelId.replace("dinein", "");
-
+        setPutToggle(true);
         api
           .createDummyOrder({
             username: username,
@@ -246,15 +246,19 @@ export default function Menu(props) {
             HotelId: hotelId,
           })
           .then((res) => {
-            window.location.assign(`${window.location.href}/${res._id}`);
+            setLockByName(res.lockBy);
+            history.push(`${hotelId}/${res._id}`);
+            setPutToggle(false);
           });
       }
     }
+
     if (window.location.href.split("/").length === 6) {
+      const dummyOrderId = window.location.href.split("/")[5];
       try {
         setPutToggle(true);
         api
-          .adduserDummyOrder(dummyOrder._id, newCartItems, username)
+          .adduserDummyOrder(dummyOrderId, newCartItems, username)
           .then((res) => {
             putRequestHandler(res);
           })
@@ -439,14 +443,18 @@ export default function Menu(props) {
     hotelId = hotelId.replace("take", "");
     hotelId = hotelId.replace("dinein", "");
     try {
+      setPutToggle(true);
       api
         .waiterOnCall(hotelId, username)
         .then((res) => {
+          console.log(res, "waiteroncall");
           Swal.fire({
             icon: "success",
             title: "Waiter On Call",
             showConfirmButton: false,
             timer: 1500,
+          }).then(() => {
+            setPutToggle(false);
           });
         })
         .catch((err) => {
@@ -455,10 +463,13 @@ export default function Menu(props) {
             title: "Waiter Not Found",
             showConfirmButton: false,
             timer: 1500,
+          }).then(() => {
+            setPutToggle(false);
           });
         });
     } catch (error) {
       console.log(error);
+      setPutToggle(false);
     }
   };
   // console.log("this is cart items", cartItems);
@@ -586,6 +597,7 @@ export default function Menu(props) {
                             items={items[category]}
                             allItems={items}
                             cartItems={cartItems}
+                            setCartItems={setCartItems}
                             handleAddCartItem={handleAddCartItem}
                             handleRemoveCartItem={handleRemoveCartItem}
                             handleDiscardCartItem={handleDiscardCartItem}
@@ -605,6 +617,7 @@ export default function Menu(props) {
                             items={items[category]}
                             allItems={items}
                             cartItems={cartItems}
+                            setCartItems={setCartItems}
                             handleAddCartItem={handleAddCartItem}
                             handleRemoveCartItem={handleRemoveCartItem}
                             handleDiscardCartItem={handleDiscardCartItem}

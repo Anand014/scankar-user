@@ -45,3 +45,27 @@
 .MuiBox-root {
   padding: 0px !important;
 }
+.wrapperItems {
+  margin-top: 1.5rem;
+}
+
+@media only screen and (max-width: 655px) {
+  .addcard_wrapper {
+    height: 8rem;
+  }
+  .addcard_wrapper h2 {
+    font-size: 1.5rem;
+  }
+  .addcard_wrapper Button {
+    padding-left: 1rem;
+  }
+  .wrapperItems {
+    margin-top: 2.5rem;
+  }
+}
+
+@media only screen and (max-width: 360px) {
+  .addcard_wrapper h2 {
+    font-size: 1rem;
+  }
+}
