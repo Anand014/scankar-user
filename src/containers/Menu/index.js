@@ -597,6 +597,7 @@ export default function Menu(props) {
                             items={items[category]}
                             allItems={items}
                             cartItems={cartItems}
+                            setCartItems={setCartItems}
                             putRequestHandler={putRequestHandler}
                             handleAddCartItem={handleAddCartItem}
                             handleRemoveCartItem={handleRemoveCartItem}
@@ -617,6 +618,7 @@ export default function Menu(props) {
                             items={items[category]}
                             allItems={items}
                             cartItems={cartItems}
+                            setCartItems={setCartItems}
                             putRequestHandler={putRequestHandler}
                             handleAddCartItem={handleAddCartItem}
                             handleRemoveCartItem={handleRemoveCartItem}

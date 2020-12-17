@@ -95,6 +95,10 @@ export default function InteractiveList(props) {
   });
 
   const handleClearCart = () => {
+    props.setCartItems({});
+    cookie.set("cart-items", {});
+    setYourItems(0);
+    setPrice(0);
     if (window.location.href.split("/").length === 6) {
       const dummyOrderId = window.location.href.split("/")[5];
       let foodinfo = {};
@@ -104,8 +108,6 @@ export default function InteractiveList(props) {
           .then((res) => {
             console.log(res, "clear cart");
             props.putRequestHandler(res);
-            setYourItems(0);
-            setPrice(0);
           })
           .catch((err) => {
             console.log(err);

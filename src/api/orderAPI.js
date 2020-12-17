@@ -49,7 +49,7 @@ export const adduserDummyOrder = (id, foodinfo, username) => {
 };
 
 export const waiterOnCall = (id, username) => {
-  const url = server + `/customer-order/woc/${id}/${username}`;
+  const url = server + `/woc/${id}/${username}`;
   return GetRequest(url);
 };
 
