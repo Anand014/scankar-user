@@ -133,12 +133,9 @@ const Navbar = (props) => {
     window.location.assign(window.location.href.replace("/menu", "/login"));
   };
   const routeHandle = () => {
-    let idd = window.location.href.split("/")[4];
-    let orderRoute = window.location.href.split("/")[3];
-    orderRoute = orderRoute.replace("menu", "overview");
-    console.log(orderRoute);
+    let idd = cookie.get("userId");
     cookie.set("cart-items", {});
-    history.push(`/${orderRoute}/${idd}`);
+    history.push(`/overview/${idd}`);
   };
 
   return (

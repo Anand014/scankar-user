@@ -4,8 +4,7 @@ import Table from "@material-ui/core/Table";
 import TableBody from "@material-ui/core/TableBody";
 import TableCell from "@material-ui/core/TableCell";
 import TableContainer from "@material-ui/core/TableContainer";
-import CircularProgress from "@material-ui/core/CircularProgress";
-import Fade from "@material-ui/core/Fade";
+
 import TableHead from "@material-ui/core/TableHead";
 import TableRow from "@material-ui/core/TableRow";
 import Paper from "@material-ui/core/Paper";
@@ -19,6 +18,7 @@ import { Button, Form, TextArea, List } from "semantic-ui-react";
 import AddIcon from "@material-ui/icons/Add";
 import RemoveIcon from "@material-ui/icons/Remove";
 import CrossIcon from "@material-ui/icons/Clear";
+import { LinearProgress } from "@material-ui/core";
 // import {
 //   ButtonGroup,
 //   // Button,
@@ -27,6 +27,12 @@ import CrossIcon from "@material-ui/icons/Clear";
 const useStyles = makeStyles({
   table: {
     minWidth: 300,
+  },
+  barroot: {
+    backgroundColor: "#c5a51f",
+  },
+  root: {
+    backgroundColor: "#f0e6b9",
   },
 });
 
@@ -151,17 +157,7 @@ export default function SimpleTable() {
   return (
     <>
       <Navbar active="Order Summary" />
-      <div>
-        <Fade
-          in={loader}
-          style={{
-            transitionDelay: loader ? "800ms" : "0ms",
-          }}
-          className={"loader"}
-          unmountOnExit
-        >
-          <CircularProgress />
-        </Fade>
+      <div style={{ pointerEvents: loader && "none" }}>
         <TableContainer component={Paper}>
           <Table className={classes.table} aria-label="simple table">
             <TableHead>
@@ -296,6 +292,16 @@ export default function SimpleTable() {
             </TableRow>
           </Table>
         </TableContainer>
+        {loader ? (
+          <LinearProgress
+            classes={{
+              barColorPrimary: classes.barroot,
+            }}
+            className={classes.root}
+          />
+        ) : (
+          ""
+        )}
 
         <Form style={{ padding: "1em" }}>
           <TextArea

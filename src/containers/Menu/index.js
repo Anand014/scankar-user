@@ -9,9 +9,11 @@ import {
   Box,
   Grid,
   Button,
-  Input,
   LinearProgress,
   Chip,
+  TextField,
+  InputAdornment,
+  IconButton,
 } from "@material-ui/core";
 import FaceIcon from "@material-ui/icons/Face";
 import RefreshIcon from "@material-ui/icons/Refresh";
@@ -25,9 +27,10 @@ import "./style.css";
 
 import Items from "../../components/Items";
 import { ControlLabel } from "rsuite";
-import { Form } from "semantic-ui-react";
+import { Form, Input } from "semantic-ui-react";
 import Swal from "sweetalert2";
 import Axios from "axios";
+import { AccountCircle } from "@material-ui/icons";
 function TabPanel(props) {
   const { children, value, index, ...other } = props;
 
@@ -71,8 +74,16 @@ function a11yProps(index) {
 //     height: 380,
 //   },
 // }));
+const useStyles = makeStyles({
+  barroot: {
+    backgroundColor: "#c5a71f",
+  },
+  root: {
+    backgroundColor: "#f0e6b9",
+  },
+});
 export default function Menu(props) {
-  // const classes = useStyles();
+  const classes = useStyles();
   const [value, setValue] = useState(0);
   const [categories, setCategories] = useState([]);
   const [items, setItems] = useState({});
@@ -164,21 +175,31 @@ export default function Menu(props) {
   }, []);
 
   const refreshDummyOrder = (id) => {
-    api.getDummyOrder(id).then((res) => {
-      setDummyOrder(res.data.product);
-      setCartItems({ ...res.data.product.foodinfo[0] });
+    api
+      .getDummyOrder(id)
+      .then((res) => {
+        setDummyOrder(res.data.product);
+        setCartItems({ ...res.data.product.foodinfo[0] });
 
-      setCartItemsInCookies({ ...res.data.product.foodinfo[0] });
+        setCartItemsInCookies({ ...res.data.product.foodinfo[0] });
 
-      if (username.toUpperCase() === res.data.product.lockBy.toUpperCase()) {
-        setLockByName(res.data.product.lockBy);
-        setLockByToggle(false);
-      } else {
-        setLockByName(res.data.product.lockBy);
-        setLockByToggle(true);
-      }
-      setPutToggle(false);
-    });
+        if (username.toUpperCase() === res.data.product.lockBy.toUpperCase()) {
+          setLockByName(res.data.product.lockBy);
+          setLockByToggle(false);
+        } else {
+          setLockByName(res.data.product.lockBy);
+          setLockByToggle(true);
+        }
+        setPutToggle(false);
+      })
+      .catch((error) => {
+        Swal.fire({
+          title: "Error Report",
+          icon: "error",
+        }).then(() => {});
+        console.log(error);
+        setPutToggle(false);
+      });
   };
 
   const putRequestHandler = (res) => {
@@ -422,8 +443,9 @@ export default function Menu(props) {
   const refreshHandle = () => {
     if (window.location.href.split("/").length !== 6) {
     } else {
+      let dummyorderID = window.location.href.split("/")[5];
       setPutToggle(true);
-      refreshDummyOrder(dummyOrder._id);
+      refreshDummyOrder(dummyorderID);
     }
   };
 
@@ -525,110 +547,110 @@ export default function Menu(props) {
             >
               <FileCopyIcon
                 onClick={urlcopyHandler}
-                style={{ cursor: "pointer" }}
+                style={{ cursor: "pointer", color: "#c5a71f" }}
               />
               <Chip
                 icon={<FaceIcon />}
                 label="Call Waiter"
                 variant="outlined"
                 clickable
-                style={{ marginRight: "1rem", marginLeft: "1rem" }}
+                style={{
+                  marginRight: "1rem",
+                  marginLeft: "1rem",
+                  color: "#c5a71f",
+                  borderColor: "#c5a71f",
+                }}
                 onClick={callWaiterHandle}
               />
               <RefreshIcon
                 fontSize="large"
-                style={{ marginRight: "1rem", cursor: "pointer" }}
+                style={{
+                  marginRight: "1rem",
+                  cursor: "pointer",
+                  color: "#c5a71f",
+                }}
                 onClick={refreshHandle}
               />
-              {NoDummyOrder ? (
-                <Form
-                  onSubmit={handleLockBy}
-                  style={{ pointerEvents: "none", opacity: "0.7" }}
+              <TextField
+                style={{ marginRight: "1.2rem", width: "30ch" }}
+                placeholder={
+                  LockByName
+                    ? LockByName[0].toUpperCase() + LockByName.substring(1)
+                    : "Enter Name"
+                }
+                onChange={(e) => setLockByName(e.target.value)}
+                InputProps={{
+                  startAdornment: (
+                    <InputAdornment position="start">
+                      <AccountCircle />
+                    </InputAdornment>
+                  ),
+                  endAdornment: (
+                    <Button
+                      variant="outlined"
+                      onClick={handleLockBy}
+                      size="large"
+                      style={{ color: "#c5a71f", borderColor: "#c5a71f" }}
+                    >
+                      LockBy
+                    </Button>
+                  ),
+                }}
+              />
+              {/* <Form onSubmit={handleLockBy}>
+                <Input
+                  type="text"
+                  placeholder="Enter name"
+                  value={LockByName}
+                  onChange={(e) => setLockByName(e.target.value)}
+                />
+                <Button
+                  type="submit"
+                  style={{ fontSize: "1rem", marginRight: "1.5rem" }}
                 >
-                  <Input
-                    disabled={lockByToggle}
-                    type="text"
-                    placeholder="Enter name"
-                    value={LockByName}
-                    onChange={(e) => setLockByName(e.target.value)}
-                  />
-                  <Button
-                    type="submit"
-                    disabled={lockByToggle}
-                    style={{ fontSize: "1rem", marginRight: "1.5rem" }}
-                  >
-                    LockBy
-                  </Button>
-                </Form>
-              ) : (
-                <Form onSubmit={handleLockBy}>
-                  <Input
-                    disabled={lockByToggle}
-                    type="text"
-                    placeholder="Enter name"
-                    value={LockByName}
-                    onChange={(e) => setLockByName(e.target.value)}
-                  />
-                  <Button
-                    type="submit"
-                    disabled={lockByToggle}
-                    style={{ fontSize: "1rem", marginRight: "1.5rem" }}
-                  >
-                    LockBy
-                  </Button>
-                </Form>
-              )}
+                  LockBy
+                </Button>
+              </Form> */}
             </Grid>
           </AppBar>
-          {putToggle ? <LinearProgress /> : ""}
+          {putToggle ? (
+            <LinearProgress
+              classes={{
+                barColorPrimary: classes.barroot,
+              }}
+              className={classes.root}
+            />
+          ) : (
+            ""
+          )}
           {categories &&
             categories.map((category, index) => {
               // console.log("clicked", clickedCat)
               return (
-                <div>
-                  {lockByToggle || putToggle ? (
-                    <div style={{ pointerEvents: "none", opacity: "0.7" }}>
-                      <TabPanel value={value} index={index} key={index}>
-                        {items[category] && (
-                          <Items
-                            className="remove_padding"
-                            style={{ padding: "5px" }}
-                            value={value}
-                            items={items[category]}
-                            allItems={items}
-                            cartItems={cartItems}
-                            setCartItems={setCartItems}
-                            putRequestHandler={putRequestHandler}
-                            handleAddCartItem={handleAddCartItem}
-                            handleRemoveCartItem={handleRemoveCartItem}
-                            handleDiscardCartItem={handleDiscardCartItem}
-                            data={data}
-                          />
-                        )}
-                      </TabPanel>
-                    </div>
-                  ) : (
-                    <div>
-                      <TabPanel value={value} index={index} key={index}>
-                        {items[category] && (
-                          <Items
-                            className="remove_padding"
-                            style={{ padding: "5px" }}
-                            value={value}
-                            items={items[category]}
-                            allItems={items}
-                            cartItems={cartItems}
-                            setCartItems={setCartItems}
-                            putRequestHandler={putRequestHandler}
-                            handleAddCartItem={handleAddCartItem}
-                            handleRemoveCartItem={handleRemoveCartItem}
-                            handleDiscardCartItem={handleDiscardCartItem}
-                            data={data}
-                          />
-                        )}
-                      </TabPanel>
-                    </div>
-                  )}
+                <div
+                  style={{
+                    pointerEvents: (lockByToggle || putToggle) && "none",
+                    opacity: (lockByToggle || putToggle) && "0.7",
+                  }}
+                >
+                  <TabPanel value={value} index={index} key={index}>
+                    {items[category] && (
+                      <Items
+                        className="remove_padding"
+                        style={{ padding: "5px" }}
+                        value={value}
+                        items={items[category]}
+                        allItems={items}
+                        cartItems={cartItems}
+                        setCartItems={setCartItems}
+                        putRequestHandler={putRequestHandler}
+                        handleAddCartItem={handleAddCartItem}
+                        handleRemoveCartItem={handleRemoveCartItem}
+                        handleDiscardCartItem={handleDiscardCartItem}
+                        data={data}
+                      />
+                    )}
+                  </TabPanel>
                 </div>
               );
             })}

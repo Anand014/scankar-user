@@ -9,30 +9,30 @@
     user-select: none;
 } */
 
-.loader{
-    position: absolute;
-    position: absolute;
-    left: 48rem;
-    top: 26rem;
+.loader {
+  position: absolute;
+  position: absolute;
+  left: 48rem;
+  top: 26rem;
 }
 
-.image_style{
-    border-radius: 20px !important;
+.image_style {
+  border-radius: 20px !important;
 }
-.totalprice_gst{
-    text-align: center;
-    margin-bottom: 1.5em;
+.totalprice_gst {
+  text-align: center;
+  margin-bottom: 1.5em;
 }
 
-.ui.secondary.button{
-    border-radius: 25px !important;
-    background-color: #c5a51f !important;
-    margin-bottom: 3em !important;
+.ui.secondary.button {
+  border-radius: 25px !important;
+  background-color: #c5a51f !important;
+  margin-bottom: 3em !important;
 }
-.item_name{
-    text-transform: capitalize;
-    font-weight: bold;
+.item_name {
+  text-transform: capitalize;
+  font-weight: bold;
 }
-.ui.basic.buttons{
-    padding: 1em !important;
+.ui.basic.buttons {
+  padding: 1em !important;
 }
