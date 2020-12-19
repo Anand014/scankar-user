@@ -572,6 +572,7 @@ export default function Menu(props) {
                 onClick={refreshHandle}
               />
               <TextField
+                disabled={lockByToggle}
                 style={{ marginRight: "1.2rem", width: "30ch" }}
                 placeholder={
                   LockByName
