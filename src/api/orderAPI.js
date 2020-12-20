@@ -3,6 +3,7 @@ import Api from "./Api";
 const server = "https://backend.scankar.com/api/v1";
 
 export const getMenu = (data) => {
+  debugger;
   const url = server + `/users/${data}`;
   return GetRequest(url);
 };

@@ -135,7 +135,7 @@ const Navbar = (props) => {
   const routeHandle = () => {
     let idd = cookie.get("userId");
     cookie.set("cart-items", {});
-    history.push(`/overview/${idd}`);
+    history.push(`/overview/${idd.trim()}`);
   };
 
   return (
