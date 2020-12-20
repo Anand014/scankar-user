@@ -37,3 +37,28 @@
 .PrivateTabIndicator-colorPrimary-10 {
   background-color: rgb(197 165 31) !important;
 }
+
+.lockBySection {
+  margin: 0 10px 0 10px;
+}
+
+.lockBySection2 {
+  width: 30ch;
+}
+
+@media only screen and (max-width: 435px) {
+  .lockBySection {
+    margin: 0 5px 0 5px;
+  }
+  .lockBySection2 {
+    width: 25ch;
+  }
+}
+@media only screen and (max-width: 354px) {
+  .lockBySection {
+    margin: 0 2px 0 2px;
+  }
+  .lockBySection2 {
+    width: 24ch;
+  }
+}

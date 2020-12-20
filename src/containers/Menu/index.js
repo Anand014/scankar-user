@@ -546,34 +546,35 @@ export default function Menu(props) {
               alignItems="center"
             >
               <FileCopyIcon
+                className="lockBySection"
                 onClick={urlcopyHandler}
                 style={{ cursor: "pointer", color: "#c5a71f" }}
               />
               <Chip
+                className="lockBySection"
                 icon={<FaceIcon />}
+                size="small"
                 label="Call Waiter"
                 variant="outlined"
                 clickable
                 style={{
-                  marginRight: "1rem",
-                  marginLeft: "1rem",
                   color: "#c5a71f",
                   borderColor: "#c5a71f",
                 }}
                 onClick={callWaiterHandle}
               />
               <RefreshIcon
+                className="lockBySection"
                 fontSize="large"
                 style={{
-                  marginRight: "1rem",
                   cursor: "pointer",
                   color: "#c5a71f",
                 }}
                 onClick={refreshHandle}
               />
               <TextField
+                className="lockBySection2"
                 disabled={lockByToggle}
-                style={{ marginRight: "1.2rem", width: "30ch" }}
                 placeholder={
                   LockByName
                     ? LockByName[0].toUpperCase() + LockByName.substring(1)
@@ -590,7 +591,7 @@ export default function Menu(props) {
                     <Button
                       variant="outlined"
                       onClick={handleLockBy}
-                      size="large"
+                      size="small"
                       style={{ color: "#c5a71f", borderColor: "#c5a71f" }}
                     >
                       LockBy
