@@ -12,7 +12,7 @@
   padding: 0px 0px 0px 0px !important;
 }
 .addcard_wrapper {
-  position: fixed;
+  position: relative;
   width: 100%;
   bottom: 0px;
   height: 5.5rem;
@@ -44,9 +44,6 @@
 }
 .MuiBox-root {
   padding: 0px !important;
-}
-.wrapperItems {
-  margin-top: 1.5rem;
 }
 
 @media only screen and (max-width: 655px) {

@@ -221,6 +221,7 @@ export default function InteractiveList(props) {
         </div>
         <div className="addcard_wrapper">
           <Grid
+            style={{ paddingTop: "1.5rem" }}
             container
             direction="row"
             justify="center"

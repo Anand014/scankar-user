@@ -13,6 +13,7 @@ import {
   // Drawer,
   SwipeableDrawer,
   Button,
+  Grid,
 } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
 // import Container from '@material-ui/core/Container';
@@ -25,7 +26,7 @@ import * as api from "../../api/orderAPI";
 import cookie from "js-cookie";
 import Swal from "sweetalert2";
 import { useParams } from "react-router-dom";
-import { Icon } from "semantic-ui-react";
+import { Icon, Input } from "semantic-ui-react";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -132,11 +133,6 @@ const Navbar = (props) => {
     });
     window.location.assign(window.location.href.replace("/menu", "/login"));
   };
-  const routeHandle = () => {
-    let idd = cookie.get("userId");
-    cookie.set("cart-items", {});
-    history.push(`/overview/${idd.trim()}`);
-  };
 
   return (
     <React.Fragment>
@@ -152,23 +148,28 @@ const Navbar = (props) => {
             {/* </Link> */}
             {props.active}
           </Typography>
-          <Button
-            style={{ marginLeft: "2rem", fontSize: "1rem" }}
-            onClick={routeHandle}
-            color="inherit"
-          >
-            create new order
-          </Button>
-          <IconButton
-            style={{ marginLeft: "auto" }}
-            color="inherit"
-            aria-label="open drawer"
-            edge="end"
-            // onClick={handleDrawer}
-            // className={clsx(open && classes.hide)}
-          >
-            <MenuIcon onClick={handleDrawer} />
-          </IconButton>
+          <Grid style={{ marginLeft: "auto" }}>
+            <Input
+              icon={
+                <Icon
+                  style={{ background: "#c5a51f" }}
+                  name="search"
+                  circular
+                  link
+                />
+              }
+              placeholder="Search"
+            />
+            <IconButton
+              color="inherit"
+              aria-label="open drawer"
+              edge="end"
+              // onClick={handleDrawer}
+              // className={clsx(open && classes.hide)}
+            >
+              <MenuIcon onClick={handleDrawer} />
+            </IconButton>
+          </Grid>
         </Toolbar>
       </AppBar>
       {/* <Toolbar id="back-to-top-anchor" /> */}

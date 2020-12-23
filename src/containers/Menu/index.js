@@ -497,7 +497,7 @@ export default function Menu(props) {
   // console.log("this is cart items", cartItems);
   return (
     <>
-      <Navbar active="Choose Menu" />
+      <Navbar />
       <div>
         <div>
           <AppBar position="static" color="default">
@@ -509,7 +509,7 @@ export default function Menu(props) {
               //   scrollButtons="on"
               // indicatorColor="primary"
               // textColor="primary"
-              indicatorColor="primary"
+              // indicatorColor="primary"
               // textColor="red"
               aria-label="scrollable force tabs example"
             >
