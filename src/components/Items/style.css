@@ -11,13 +11,22 @@
 .MuiBox-root-8 {
   padding: 0px 0px 0px 0px !important;
 }
-.addcard_wrapper {
+
+#contain {
   position: relative;
+}
+.listitems {
+  min-height: 65vh;
+  padding-bottom: 6rem;
+}
+#addcard_wrapper {
+  position: absolute;
+  flex-wrap: wrap;
   width: 100%;
-  bottom: 0px;
+  bottom: 0;
   height: 5.5rem;
   background: rgb(255, 255, 255);
-  box-shadow: rgba(125, 125, 125, 0.2) 0px 2px 8px;
+  box-shadow: rgba(125, 125, 125, 0.5) 0px 2px 8px;
 }
 
 .item-img {
@@ -47,22 +56,19 @@
 }
 
 @media only screen and (max-width: 655px) {
-  .addcard_wrapper {
-    height: 8rem;
+  #addcard_wrapper {
+    height: 6.5rem;
   }
-  .addcard_wrapper h2 {
+  #addcard_wrapper h2 {
     font-size: 1.5rem;
   }
-  .addcard_wrapper Button {
+  #addcard_wrapper Button {
     padding-left: 1rem;
-  }
-  .wrapperItems {
-    margin-top: 2.5rem;
   }
 }
 
 @media only screen and (max-width: 360px) {
-  .addcard_wrapper h2 {
+  #addcard_wrapper h2 {
     font-size: 1rem;
   }
 }

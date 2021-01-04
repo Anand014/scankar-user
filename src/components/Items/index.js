@@ -1,27 +1,17 @@
 import React, { useEffect, useState } from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import {
-  ButtonGroup,
-  // Button,
   ListItemText,
-  ListItemSecondaryAction,
   ListItemAvatar,
   ListItem,
   List,
   Avatar,
   Grid,
-  Box,
 } from "@material-ui/core";
 import cookie from "js-cookie";
-import ArrowForwardIosIcon from "@material-ui/icons/ArrowForwardIos";
-import FolderIcon from "@material-ui/icons/Folder";
 import "./style.css";
 import EditIcon from "@material-ui/icons/Edit";
 import AddIcon from "@material-ui/icons/Add";
-import RemoveIcon from "@material-ui/icons/Remove";
-import CrossIcon from "@material-ui/icons/Clear";
-import AddShoppingCartIcon from "@material-ui/icons/AddShoppingCart";
-import Fab from "@material-ui/core/Fab";
 import { useHistory } from "react-router";
 import { Button } from "semantic-ui-react";
 import * as api from "../../api/orderAPI";
@@ -139,14 +129,20 @@ export default function InteractiveList(props) {
     // },
   ];
   return (
-    <div>
+    <div id="contain">
       {/* <Grid container spacing={2}> */}
       <Grid>
         {/* <Typography variant="h6" className={classes.title}>
             Avatar with text and icon
           </Typography> */}
-        <div>
-          <List dense={dense}>
+        <div className="listitems">
+          <List
+            dense={dense}
+            style={{
+              overflow: "auto",
+              maxHeight: 390,
+            }}
+          >
             {items.map((item) => {
               return (
                 <ListItem key={item._id}>
@@ -219,20 +215,16 @@ export default function InteractiveList(props) {
             })}
           </List>
         </div>
-        <div className="addcard_wrapper">
+        <div id="addcard_wrapper">
           <Grid
             style={{ paddingTop: "1.5rem" }}
             container
             direction="row"
             justify="center"
             alignItems="center"
-            className="wrapperItems"
           >
             <Grid item>
-              <h2>
-                <ArrowForwardIosIcon fontSize="small" /> Your Items ({yourItems}
-                )
-              </h2>
+              <h2>Your Items ({yourItems})</h2>
             </Grid>
             <Grid
               item

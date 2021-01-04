@@ -97,6 +97,7 @@ export default function Menu(props) {
   const [dummyOrder, setDummyOrder] = useState({});
   const [putToggle, setPutToggle] = useState(false);
   const [NoDummyOrder, setNoDummyOrder] = useState(false);
+  const [restaurantName, setRestaurantName] = useState("");
   const history = useHistory();
 
   const username = cookie.get("username");
@@ -142,6 +143,8 @@ export default function Menu(props) {
     api
       .getMenu(user)
       .then((res) => {
+        setRestaurantName(res.data.user.firstName);
+
         res.data.user.menu.map((res) => {
           temp.push(res.category);
         });
@@ -494,10 +497,11 @@ export default function Menu(props) {
       setPutToggle(false);
     }
   };
+
   // console.log("this is cart items", cartItems);
   return (
     <>
-      <Navbar />
+      <Navbar active={restaurantName} />
       <div>
         <div>
           <AppBar position="static" color="default">
