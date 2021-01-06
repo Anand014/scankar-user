@@ -222,12 +222,12 @@ export default function InteractiveList(props) {
                     {/* </ListItemSecondaryAction> */}
                   </Grid>
                   <Grid item xs={1}>
-                    <p style={{ paddingLeft: "5%" }}>
+                    {/* <p style={{ paddingLeft: "5%" }}>
                       ₹
                       {Object.keys(cartItems)[i] === item._id
                         ? item.price * Object.values(cartItems)[i]
                         : "0"}
-                    </p>
+                    </p> */}
                   </Grid>
                 </ListItem>
               );
