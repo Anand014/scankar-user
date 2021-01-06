@@ -16,9 +16,10 @@
   position: relative;
 }
 .listitems {
-  min-height: 65vh;
+  min-height: 66vh;
   padding-bottom: 6rem;
 }
+
 #addcard_wrapper {
   position: absolute;
   flex-wrap: wrap;

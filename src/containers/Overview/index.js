@@ -43,6 +43,7 @@ const Overview = (props) => {
   useEffect(() => {
     const temp = [];
     api.getMenu(user).then((res) => {
+      localStorage.setItem("restaurantName", res.data.user.firstName);
       res.data.user.menu.map((res) => {
         temp.push(res.category);
         console.log("exectued getMenu");

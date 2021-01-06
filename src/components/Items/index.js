@@ -50,7 +50,7 @@ export default function InteractiveList(props) {
   const [price, setPrice] = useState(0);
   const [ClearToggleButton, setClearToggleButton] = useState(false);
   const [dense] = React.useState(false);
-  const { items, data } = props;
+  const { items, data, cartItems } = props;
   const history = useHistory();
   console.log("this is data", data);
   const username = cookie.get("username");
@@ -143,29 +143,38 @@ export default function InteractiveList(props) {
               maxHeight: 390,
             }}
           >
-            {items.map((item) => {
+            {items.map((item, i) => {
               return (
                 <ListItem key={item._id}>
-                  <ListItemAvatar>
-                    <Avatar>
-                      {/* <div className="item-img" style={{backgroundImage:`url(${item.photo})`}}/> */}
-                      <img
-                        alt="ge-title"
-                        className="image_style"
-                        style={{ width: " 200px" }}
-                        src={item.photo}
-                        style={{ height: "3em", width: "6em" }}
-                      />
-                    </Avatar>
-                  </ListItemAvatar>
-                  <ListItemText
-                    primary={item.name}
-                    secondary={"Rs." + item.price}
-                    // (props.cartItems[item._id]
-                    //   ? ` x${props.cartItems[item._id]}`
-                    //   : "")
-                    // }
-                  />
+                  <Grid
+                    item
+                    lg={12}
+                    md={10}
+                    sm={9}
+                    xs={7}
+                    style={{ display: "flex" }}
+                  >
+                    <ListItemAvatar>
+                      <Avatar>
+                        {/* <div className="item-img" style={{backgroundImage:`url(${item.photo})`}}/> */}
+                        <img
+                          alt="ge-title"
+                          className="image_style"
+                          style={{ width: " 200px" }}
+                          src={item.photo}
+                          style={{ height: "3em", width: "6em" }}
+                        />
+                      </Avatar>
+                    </ListItemAvatar>
+                    <ListItemText
+                      primary={item.name}
+                      secondary={"Rs." + item.price}
+                      // (props.cartItems[item._id]
+                      //   ? ` x${props.cartItems[item._id]}`
+                      //   : "")
+                      // }
+                    />
+                  </Grid>
                   {/* <ListItemSecondaryAction> */}
                   {/* <ButtonGroup
                   className="buttons_style"
@@ -185,31 +194,41 @@ export default function InteractiveList(props) {
                         <CrossIcon onClick={e => props.handleDiscardCartItem(item._id)} />
                     </Button>
                   </ButtonGroup> */}
-                  <Button.Group basic size="mini">
-                    <Button
-                      icon="plus"
-                      onClick={(e) => props.handleAddCartItem(item._id)}
-                    />
+                  <Grid item xs={4} sm={2} md={1}>
+                    <Button.Group basic size="mini">
+                      <Button
+                        icon="plus"
+                        onClick={(e) => props.handleAddCartItem(item._id)}
+                      />
 
-                    <Button
-                      className="total_items"
-                      // secondary=
-                      // onClick={(e) => handleAddCartItem(id)}
-                    >
-                      {props.cartItems[item._id]
-                        ? `${props.cartItems[item._id]}`
-                        : ""}
-                    </Button>
-                    <Button
-                      icon="minus"
-                      onClick={(e) => props.handleRemoveCartItem(item._id)}
-                    />
-                    {/* <Button
+                      <Button
+                        className="total_items"
+                        // secondary=
+                        // onClick={(e) => handleAddCartItem(id)}
+                      >
+                        {props.cartItems[item._id]
+                          ? `${props.cartItems[item._id]}`
+                          : ""}
+                      </Button>
+                      <Button
+                        icon="minus"
+                        onClick={(e) => props.handleRemoveCartItem(item._id)}
+                      />
+                      {/* <Button
                       icon="trash"
                       onClick={(e) => props.handleDiscardCartItem(item._id)}
                     /> */}
-                  </Button.Group>
-                  {/* </ListItemSecondaryAction> */}
+                    </Button.Group>
+                    {/* </ListItemSecondaryAction> */}
+                  </Grid>
+                  <Grid item xs={1}>
+                    <p style={{ paddingLeft: "5%" }}>
+                      ₹
+                      {Object.keys(cartItems)[i] === item._id
+                        ? item.price * Object.values(cartItems)[i]
+                        : "0"}
+                    </p>
+                  </Grid>
                 </ListItem>
               );
             })}

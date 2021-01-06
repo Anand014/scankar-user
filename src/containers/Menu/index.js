@@ -97,7 +97,9 @@ export default function Menu(props) {
   const [dummyOrder, setDummyOrder] = useState({});
   const [putToggle, setPutToggle] = useState(false);
   const [NoDummyOrder, setNoDummyOrder] = useState(false);
-  const [restaurantName, setRestaurantName] = useState("");
+  const [restaurantName, setRestaurantName] = useState(
+    localStorage.getItem("restaurantName")
+  );
   const history = useHistory();
 
   const username = cookie.get("username");
@@ -143,8 +145,6 @@ export default function Menu(props) {
     api
       .getMenu(user)
       .then((res) => {
-        setRestaurantName(res.data.user.firstName);
-
         res.data.user.menu.map((res) => {
           temp.push(res.category);
         });
@@ -511,10 +511,8 @@ export default function Menu(props) {
               onChange={handleChange}
               variant="scrollable"
               //   scrollButtons="on"
-              // indicatorColor="primary"
+              indicatorColor="primary"
               // textColor="primary"
-              // indicatorColor="primary"
-              // textColor="red"
               aria-label="scrollable force tabs example"
             >
               {categories &&
